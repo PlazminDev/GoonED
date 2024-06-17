@@ -23,7 +23,11 @@
         <div id="container">
             <canvas id="canvas"></canvas>
             <button id="button" onclick="save()">Save</button>
+            <input onchange="changeFloor()" value="10" type="number" style="position: absolute; left: 5%; top: 10%" id="floorHeight" min="0" max="256">
+            <input onchange="changeCeiling()" value="0" type="number" style="position: absolute; left: 5%; top: 15%" id="ceilingHeight" min="0" max="256">
         </div>
+        <script src="js/SAT.js"></script>
+        <script src="js/keys.js"></script>
         <script src="js/index.js"></script>
     </body>
 </html>

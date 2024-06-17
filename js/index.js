@@ -4,15 +4,18 @@ var xPos = 0, yPos = 0; // Position of the camera
 var pan = false;
 var zoom = 1.00;
 
-const gridSize = 64;
+var gridSize = 64;
 
 const Vector = (x, y) => ({ x, y }); // X: X position Y: Y position
 const Line = (a, b) => ({ a, b }); // A: Index of first vertex B: Index of second vertex
-const Sector = (vertices, lines, floor, ceiling) => ({ vertices, lines, floor, ceiling }); // A: Index of first vertex B: Index of second vertex
+const Sector = (vertices, lines, floor, ceiling, selected) => ({ vertices, lines, floor, ceiling, selected }); // A: Index of first vertex B: Index of second vertex
 
 var vertices = [];
 var lines = [];
 var sectors = [];
+
+const floorHeight = document.getElementById("floorHeight");
+const ceilingHeight = document.getElementById("ceilingHeight");
 
 var startEditIndex_Vertex = -1;
 var startEditIndex_Line = -1;
@@ -89,7 +92,7 @@ function save() {
         savefile += "lines = " + i + ";\n";
         savefile += "sector = " + lines[i].sector + ";\n";
         savefile += "side_plane( )\n";
-        savefile += 'side_texture ( path = "General/_Brick/ivybrick3"; scale = 1,0.640625; )\n';
+        savefile += 'side_texture ( path = "Editor/Default.png"; scale = 1,0.640625; )\n';
 
         savefile += "}\n";
         savefile += "\n";
@@ -120,7 +123,7 @@ function save() {
         savefile += "floor_slope ( sloped = False; direction = 0; height = 0; )\n";
         savefile += 'ceiling_slope( sloped = False; direction = 0; height = 0; )\n';
         savefile += 'floor_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )\n';
-        savefile += 'ceiling_texture(path = "Editor/Default.png"; offset = 0.234375, -0.203125; scale = -0.03125, 0.40625; angle = 90; )\n';
+        savefile += 'ceiling_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )\n';
         savefile += "floor_plane(visible = True; solid = True; brightness_offset = 0; )\n";
         savefile += "ceiling_plane(visible = True; solid = True; brightness_offset = 0; )\n";
 
@@ -160,6 +163,8 @@ function setupCanvas() {
     setInterval(update, 1);
 }
 
+var holdingPlus = false, holdingMinus = false;
+
 function update() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -175,6 +180,20 @@ function update() {
 
     drawSectors();
 
+    if (GetKey(Keys.Plus) && !holdingPlus) {
+        gridSize *= 2;
+        holdingPlus = true;
+    } else if (!GetKey(Keys.Plus)) {
+        holdingPlus = false;
+    }
+
+    if (GetKey(Keys.Minus) && !holdingMinus) {
+        gridSize /= 2;
+        holdingMinus = true;
+    } else if (!GetKey(Keys.Minus)) {
+        holdingMinus = false;
+    }
+
     /*
     ctx.fillStyle = "#FFF";
     ctx.fillRect(xPos * zoom, yPos * zoom, 64 * zoom, 64 * zoom);
@@ -182,10 +201,19 @@ function update() {
 }
 
 function drawSectors() {
-    ctx.fillStyle = "#FFFF00";
     for (let i = 0; i < sectors.length; i++) {
         ctx.beginPath();
-        ctx.globalAlpha = 0.2;
+
+        if (selectedIndex != i) {
+            ctx.fillStyle = "#FFFF00";
+        } else {
+            ctx.fillStyle = "#0000FF";
+        }
+
+        if (i != hoveringIndex)
+            ctx.globalAlpha = 0.2;
+        else
+            ctx.globalAlpha = 0.6;
         for (let j = 0; j < sectors[i].lines.length; j++) {
             var x = vertices[sectors[i].lines[j]].x + xPos;
             var y = vertices[sectors[i].lines[j]].y + yPos;
@@ -201,6 +229,15 @@ function drawSectors() {
         for (let j = 0; j < sectors[i].vertices.length; j++) {
             ctx.fillRect(vertices[sectors[i].vertices[j]].x + xPos - 4, vertices[sectors[i].vertices[j]].y + yPos - 4, 8, 8);
         }
+
+        ctx.beginPath();
+        for (let j = 0; j < sectors[i].lines.length - 1; j++) {
+            const a = lines[sectors[i].lines[j]].a;
+            const b = lines[sectors[i].lines[j]].b;
+            ctx.moveTo(vertices[a].x + xPos, vertices[a].y + yPos);
+            ctx.lineTo(vertices[b].x + xPos, vertices[b].y + yPos);
+        }
+        ctx.stroke();
     }
 }
 
@@ -335,7 +372,7 @@ canvas.addEventListener('mousedown', function (evt) {
                     lineIndices.push(j);
                 }
 
-                sectors.push(Sector(vertexIndices, lineIndices, 10, 5));
+                sectors.push(Sector(vertexIndices, lineIndices, 10, 5, false));
 
                 for (let j = 0; j < lineIndices.length; j++) {
                     lines[lineIndices[j]].sector = sectors.length - 1;
@@ -357,6 +394,14 @@ canvas.addEventListener('mousedown', function (evt) {
         previousMousePos.x = evt.clientX;
         previousMousePos.y = evt.clientY;
         pan = true;
+
+        if (hoveringIndex != -1) {
+            selectedIndex = hoveringIndex;
+            floorHeight.value = sectors[hoveringIndex].floor;
+            ceilingHeight.value = sectors[hoveringIndex].ceiling;
+        } else {
+            selectedIndex = -1;
+        }
     }
 });
 
@@ -366,15 +411,48 @@ canvas.addEventListener('mouseup', function (evt) {
     }
 });
 
+var selectedIndex = -1;
+var hoveringIndex = -1;
+
 canvas.addEventListener("mousemove", (event) => {
 
     if (pan) {
         xPos -= (previousMousePos.x - event.clientX) / zoom;
         yPos -= (previousMousePos.y - event.clientY) / zoom;
 
+        if (Math.abs((previousMousePos.x - event.clientX)) > 0 || Math.abs((previousMousePos.y - event.clientY)) > 0) {
+            selectedIndex = -1;
+        }
+
         previousMousePos.x = event.clientX;
         previousMousePos.y = event.clientY;
     }
+
+    hoveringIndex = -1;
+    for (let i = 0; i < sectors.length; i++) {
+        var verts = [];
+        for (let j = 0; j < sectors[i].vertices.length; j++) {
+            verts.push(new SAT.Vector(vertices[sectors[i].vertices[j]].x, vertices[sectors[i].vertices[j]].y));
+        }
+        const poly = new SAT.Polygon(new SAT.Vector(0, 0), verts);
+
+        if (SAT.pointInPolygon(new SAT.Vector(event.clientX - xPos, event.clientY - yPos), poly)) {
+            hoveringIndex = i;
+            break;
+        }
+    }
 });
+
+function changeFloor() {
+    if (selectedIndex != -1) {
+        sectors[selectedIndex].floor = floorHeight.value;
+    }
+}
+
+function changeCeiling() {
+    if (selectedIndex != -1) {
+        sectors[selectedIndex].ceiling = ceilingHeight.value;
+    }
+}
 
 setupCanvas();
