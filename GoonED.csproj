@@ -5,34 +5,21 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="res\shaders\imgui-frag.glsl" />
-    <None Remove="res\shaders\imgui-frag.hlsl" />
-    <None Remove="res\shaders\imgui-frag.hlsl.bytes" />
-    <None Remove="res\shaders\imgui-vertex.glsl" />
-    <None Remove="res\shaders\imgui-vertex.hlsl" />
-    <None Remove="res\shaders\imgui-vertex.hlsl.bytes" />
+    <None Include="..\..\..\.nuget\packages\sdl2.bindings\1.0.0\lib\netstandard2.1\SDL2.Bindings.dll" Link="SDL2.Bindings.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\.nuget\packages\sdl2.net\1.2.3\lib\net6.0\SDL2.NET.dll" Link="SDL2.NET.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="res\shaders\imgui-frag.glsl" />
-    <EmbeddedResource Include="res\shaders\imgui-frag.hlsl" />
-    <EmbeddedResource Include="res\shaders\imgui-frag.hlsl.bytes" />
-    <EmbeddedResource Include="res\shaders\imgui-vertex.glsl" />
-    <EmbeddedResource Include="res\shaders\imgui-vertex.hlsl" />
-    <EmbeddedResource Include="res\shaders\imgui-vertex.hlsl.bytes" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.90.8.1" />
-    <PackageReference Include="Veldrid" Version="4.9.0" />
-    <PackageReference Include="Veldrid.ImGui" Version="5.72.0" />
+    <PackageReference Include="SDL2-CS" Version="2.0.0" />
+    <PackageReference Include="SDL2.NET" Version="1.2.3" />
     <PackageReference Include="Veldrid.SDL2" Version="4.9.0" />
-    <PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
-    <PackageReference Include="Veldrid.Utilities" Version="4.9.0" />
   </ItemGroup>
 
 </Project>

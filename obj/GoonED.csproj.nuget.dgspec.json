@@ -50,27 +50,15 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "ImGui.NET": {
+            "SDL2-CS": {
               "target": "Package",
-              "version": "[1.90.8.1, )"
+              "version": "[2.0.0, )"
             },
-            "Veldrid": {
+            "SDL2.NET": {
               "target": "Package",
-              "version": "[4.9.0, )"
-            },
-            "Veldrid.ImGui": {
-              "target": "Package",
-              "version": "[5.72.0, )"
+              "version": "[1.2.3, )"
             },
             "Veldrid.SDL2": {
-              "target": "Package",
-              "version": "[4.9.0, )"
-            },
-            "Veldrid.StartupUtilities": {
-              "target": "Package",
-              "version": "[4.9.0, )"
-            },
-            "Veldrid.Utilities": {
               "target": "Package",
               "version": "[4.9.0, )"
             }

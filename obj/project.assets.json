@@ -2,46 +2,6 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "ImGui.NET/1.90.8.1": {
-        "type": "package",
-        "dependencies": {
-          "System.Buffers": "4.4.0",
-          "System.Numerics.Vectors": "4.4.0",
-          "System.Runtime.CompilerServices.Unsafe": "4.4.0"
-        },
-        "compile": {
-          "lib/net6.0/ImGui.NET.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/ImGui.NET.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/linux-x64/native/libcimgui.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/osx/native/libcimgui.dylib": {
-            "assetType": "native",
-            "rid": "osx"
-          },
-          "runtimes/win-arm64/native/cimgui.dll": {
-            "assetType": "native",
-            "rid": "win-arm64"
-          },
-          "runtimes/win-x64/native/cimgui.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x86/native/cimgui.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          }
-        }
-      },
       "Microsoft.CSharp/4.0.1": {
         "type": "package",
         "dependencies": {
@@ -177,12 +137,6 @@
           }
         }
       },
-      "PolySharp/1.10.0": {
-        "type": "package",
-        "build": {
-          "buildTransitive/PolySharp.targets": {}
-        }
-      },
       "runtime.native.System/4.0.0": {
         "type": "package",
         "dependencies": {
@@ -196,41 +150,36 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "SharpGen.Runtime/2.0.0-beta.13": {
+      "SDL2-CS/2.0.0": {
+        "type": "package"
+      },
+      "SDL2.Bindings/1.0.0": {
         "type": "package",
-        "dependencies": {
-          "PolySharp": "1.10.0"
-        },
         "compile": {
-          "lib/net7.0/SharpGen.Runtime.dll": {}
+          "lib/netstandard2.1/SDL2.Bindings.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net7.0/SharpGen.Runtime.dll": {}
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
+          "lib/netstandard2.1/SDL2.Bindings.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "SharpGen.Runtime.COM/2.0.0-beta.13": {
+      "SDL2.NET/1.2.3": {
         "type": "package",
         "dependencies": {
-          "PolySharp": "1.10.0",
-          "SharpGen.Runtime": "2.0.0-beta.13"
+          "SDL2.Bindings": "1.0.0"
         },
         "compile": {
-          "lib/net7.0/SharpGen.Runtime.COM.dll": {}
+          "lib/net6.0/SDL2.NET.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net7.0/SharpGen.Runtime.COM.dll": {}
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
+          "lib/net6.0/SDL2.NET.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.AppContext/4.1.0": {
@@ -245,15 +194,6 @@
         },
         "runtime": {
           "lib/netstandard1.6/System.AppContext.dll": {}
-        }
-      },
-      "System.Buffers/4.4.0": {
-        "type": "package",
-        "compile": {
-          "ref/netcoreapp2.0/_._": {}
-        },
-        "runtime": {
-          "lib/netcoreapp2.0/_._": {}
         }
       },
       "System.Collections/4.0.11": {
@@ -593,20 +533,17 @@
           }
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+      "System.Runtime.CompilerServices.Unsafe/4.5.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
+          "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll": {
             "related": ".xml"
           }
-        },
-        "build": {
-          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Runtime.Extensions/4.1.0": {
@@ -836,74 +773,6 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
-      "Veldrid/4.9.0": {
-        "type": "package",
-        "dependencies": {
-          "NativeLibraryLoader": "1.0.13",
-          "Veldrid.MetalBindings": "4.9.0",
-          "Veldrid.OpenGLBindings": "4.9.0",
-          "Vk": "1.0.25",
-          "Vortice.D3DCompiler": "2.3.0",
-          "Vortice.Direct3D11": "2.3.0"
-        },
-        "compile": {
-          "lib/net6.0/Veldrid.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Veldrid.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Veldrid.ImGui/5.72.0": {
-        "type": "package",
-        "dependencies": {
-          "ImGui.NET": "1.72.0",
-          "Veldrid": "4.5.0",
-          "Veldrid.SDL2": "4.5.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Veldrid.ImGui.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Veldrid.ImGui.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Veldrid.MetalBindings/4.9.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Veldrid.MetalBindings.dll": {
-            "related": ".pdb"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Veldrid.MetalBindings.dll": {
-            "related": ".pdb"
-          }
-        }
-      },
-      "Veldrid.OpenGLBindings/4.9.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Veldrid.OpenGLBindings.dll": {
-            "related": ".pdb"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Veldrid.OpenGLBindings.dll": {
-            "related": ".pdb"
-          }
-        }
-      },
       "Veldrid.SDL2/4.9.0": {
         "type": "package",
         "dependencies": {
@@ -935,185 +804,10 @@
             "rid": "win-x86"
           }
         }
-      },
-      "Veldrid.StartupUtilities/4.9.0": {
-        "type": "package",
-        "dependencies": {
-          "Veldrid": "4.9.0",
-          "Veldrid.SDL2": "4.9.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Veldrid.StartupUtilities.dll": {
-            "related": ".pdb"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Veldrid.StartupUtilities.dll": {
-            "related": ".pdb"
-          }
-        }
-      },
-      "Veldrid.Utilities/4.9.0": {
-        "type": "package",
-        "dependencies": {
-          "Veldrid": "4.9.0"
-        },
-        "compile": {
-          "lib/netstandard2.1/Veldrid.Utilities.dll": {
-            "related": ".pdb"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.1/Veldrid.Utilities.dll": {
-            "related": ".pdb"
-          }
-        }
-      },
-      "Vk/1.0.25": {
-        "type": "package",
-        "compile": {
-          "lib/net5.0/vk.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/vk.dll": {}
-        }
-      },
-      "Vortice.D3DCompiler/2.3.0": {
-        "type": "package",
-        "dependencies": {
-          "SharpGen.Runtime": "2.0.0-beta.13",
-          "SharpGen.Runtime.COM": "2.0.0-beta.13",
-          "Vortice.DirectX": "2.3.0",
-          "Vortice.Mathematics": "1.4.25"
-        },
-        "compile": {
-          "lib/net6.0/Vortice.D3DCompiler.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Vortice.D3DCompiler.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
-        }
-      },
-      "Vortice.Direct3D11/2.3.0": {
-        "type": "package",
-        "dependencies": {
-          "SharpGen.Runtime": "2.0.0-beta.13",
-          "SharpGen.Runtime.COM": "2.0.0-beta.13",
-          "Vortice.DXGI": "2.3.0",
-          "Vortice.Mathematics": "1.4.25"
-        },
-        "compile": {
-          "lib/net6.0/Vortice.Direct3D11.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Vortice.Direct3D11.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
-        }
-      },
-      "Vortice.DirectX/2.3.0": {
-        "type": "package",
-        "dependencies": {
-          "SharpGen.Runtime": "2.0.0-beta.13",
-          "SharpGen.Runtime.COM": "2.0.0-beta.13",
-          "Vortice.Mathematics": "1.4.25"
-        },
-        "compile": {
-          "lib/net7.0/Vortice.DirectX.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0/Vortice.DirectX.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
-        }
-      },
-      "Vortice.DXGI/2.3.0": {
-        "type": "package",
-        "dependencies": {
-          "SharpGen.Runtime": "2.0.0-beta.13",
-          "SharpGen.Runtime.COM": "2.0.0-beta.13",
-          "Vortice.DirectX": "2.3.0",
-          "Vortice.Mathematics": "1.4.25"
-        },
-        "compile": {
-          "lib/net6.0/Vortice.DXGI.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Vortice.DXGI.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
-        }
-      },
-      "Vortice.Mathematics/1.4.25": {
-        "type": "package",
-        "compile": {
-          "lib/net7.0/Vortice.Mathematics.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0/Vortice.Mathematics.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
       }
     }
   },
   "libraries": {
-    "ImGui.NET/1.90.8.1": {
-      "sha512": "O/Z4akFQhywpLQ+SyPC3nzfZcGb0vPYmVVR21hRQxkaQNbVKbHzDWc2t9IoSv/nP2/ly6BXNNz7UK9ngbsgyLg==",
-      "type": "package",
-      "path": "imgui.net/1.90.8.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/net40/ImGui.NET.targets",
-        "imgui.net.1.90.8.1.nupkg.sha512",
-        "imgui.net.nuspec",
-        "lib/net6.0/ImGui.NET.dll",
-        "lib/net6.0/ImGui.NET.xml",
-        "lib/netstandard2.0/ImGui.NET.dll",
-        "lib/netstandard2.0/ImGui.NET.xml",
-        "runtimes/linux-x64/native/libcimgui.so",
-        "runtimes/osx/native/libcimgui.dylib",
-        "runtimes/win-arm64/native/cimgui.dll",
-        "runtimes/win-x64/native/cimgui.dll",
-        "runtimes/win-x86/native/cimgui.dll"
-      ]
-    },
     "Microsoft.CSharp/4.0.1": {
       "sha512": "17h8b5mXa87XYKrrVqdgZ38JefSUqLChUQpXgSnpzsM0nDOhE40FTeNWOJ/YmySGV6tG6T8+hjz6vxbknHJr6A==",
       "type": "package",
@@ -1272,23 +966,6 @@
         "tools/install.ps1"
       ]
     },
-    "PolySharp/1.10.0": {
-      "sha512": "+uNyVhhKOskjJLKOwIQ2qGaA0T507FaMbz5RwLAtmRaMaTAcUAZAiZvSk4Z8z6GkmqOyO1zryYNXmO0Vh7IrYQ==",
-      "type": "package",
-      "path": "polysharp/1.10.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "analyzers/dotnet/cs/PolySharp.SourceGenerators.dll",
-        "analyzers/dotnet/cs/PolySharp.SourceGenerators.xml",
-        "build/PolySharp.targets",
-        "buildTransitive/PolySharp.targets",
-        "icon.png",
-        "polysharp.1.10.0.nupkg.sha512",
-        "polysharp.nuspec"
-      ]
-    },
     "runtime.native.System/4.0.0": {
       "sha512": "QfS/nQI7k/BLgmLrw7qm7YBoULEvgWnPI+cYsbfCVFTW8Aj+i8JhccxcFMu1RWms0YZzF+UHguNBK4Qn89e2Sg==",
       "type": "package",
@@ -1302,46 +979,47 @@
         "runtime.native.system.nuspec"
       ]
     },
-    "SharpGen.Runtime/2.0.0-beta.13": {
-      "sha512": "H+Up2Er3ptWzcQ+CAO652fEsBLAmoXqKqtvc/6ycRV9XfLN2XJch0h8CwKQ3muD6eADPFf8Xp+nDQ8wDpcRDlg==",
+    "SDL2-CS/2.0.0": {
+      "sha512": "W7T4y+lMs7Wm/94dGggRxJYqxX5N6uuxuxw5ob/H34fnaoUwgoG0s+P7xzqsGXUc1cbCAjnShs21FdeFUnPlHA==",
       "type": "package",
-      "path": "sharpgen.runtime/2.0.0-beta.13",
+      "path": "sdl2-cs/2.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "build/Mapping.xml",
-        "build/SharpGen.Runtime.props",
-        "buildMultiTargeting/SharpGen.Runtime.props",
-        "lib/net461/SharpGen.Runtime.dll",
-        "lib/net471/SharpGen.Runtime.dll",
-        "lib/net6.0/SharpGen.Runtime.dll",
-        "lib/net7.0/SharpGen.Runtime.dll",
-        "lib/netcoreapp3.1/SharpGen.Runtime.dll",
-        "lib/netstandard2.0/SharpGen.Runtime.dll",
-        "lib/netstandard2.1/SharpGen.Runtime.dll",
-        "sharpgen.runtime.2.0.0-beta.13.nupkg.sha512",
-        "sharpgen.runtime.nuspec"
+        "LICENSE",
+        "content/net20/SDL2-CS/LPUtf8StrMarshaler.cs",
+        "content/net20/SDL2-CS/SDL2.cs",
+        "content/net20/SDL2-CS/SDL2_image.cs",
+        "content/net20/SDL2-CS/SDL2_mixer.cs",
+        "content/net20/SDL2-CS/SDL2_ttf.cs",
+        "sdl2-cs.2.0.0.nupkg.sha512",
+        "sdl2-cs.nuspec"
       ]
     },
-    "SharpGen.Runtime.COM/2.0.0-beta.13": {
-      "sha512": "H22LsE3XTIOevf2TJgPgPnfYmjMlCtN+QYZVxzXlgTrgG2jHSTUTKZpIMPbKliLJGCEnDfX6yvBJvya0/xRTkA==",
+    "SDL2.Bindings/1.0.0": {
+      "sha512": "c/BD1Kk5+gm4ZRlip0JWJsKbtrqRR5oZDltey0DYQpnjO6orKVhJJ69M57ka7eky0jzEiXb4omEYtM4sLJ/A0g==",
       "type": "package",
-      "path": "sharpgen.runtime.com/2.0.0-beta.13",
+      "path": "sdl2.bindings/1.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "build/SharpGen.Runtime.COM.BindMapping.xml",
-        "build/SharpGen.Runtime.COM.props",
-        "buildMultiTargeting/SharpGen.Runtime.COM.props",
-        "lib/net461/SharpGen.Runtime.COM.dll",
-        "lib/net471/SharpGen.Runtime.COM.dll",
-        "lib/net6.0/SharpGen.Runtime.COM.dll",
-        "lib/net7.0/SharpGen.Runtime.COM.dll",
-        "lib/netcoreapp3.1/SharpGen.Runtime.COM.dll",
-        "lib/netstandard2.0/SharpGen.Runtime.COM.dll",
-        "lib/netstandard2.1/SharpGen.Runtime.COM.dll",
-        "sharpgen.runtime.com.2.0.0-beta.13.nupkg.sha512",
-        "sharpgen.runtime.com.nuspec"
+        "lib/netstandard2.1/SDL2.Bindings.dll",
+        "lib/netstandard2.1/SDL2.Bindings.xml",
+        "sdl2.bindings.1.0.0.nupkg.sha512",
+        "sdl2.bindings.nuspec"
+      ]
+    },
+    "SDL2.NET/1.2.3": {
+      "sha512": "Oi54Sk0+gi9p1/9GT+eSKBqb4J0enYXj0IxaO30B3PMiPK3c8IZx/vO+yIrTCWhf+AHOSIQxbUOYqNjcooCQyQ==",
+      "type": "package",
+      "path": "sdl2.net/1.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/SDL2.NET.dll",
+        "lib/net6.0/SDL2.NET.xml",
+        "sdl2.net.1.2.3.nupkg.sha512",
+        "sdl2.net.nuspec"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -1396,31 +1074,6 @@
         "runtimes/aot/lib/netcore50/System.AppContext.dll",
         "system.appcontext.4.1.0.nupkg.sha512",
         "system.appcontext.nuspec"
-      ]
-    },
-    "System.Buffers/4.4.0": {
-      "sha512": "AwarXzzoDwX6BgrhjoJsk6tUezZEozOT5Y9QKF94Gl4JK91I4PIIBkBco9068Y9/Dra8Dkbie99kXB8+1BaYKw==",
-      "type": "package",
-      "path": "system.buffers/4.4.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/netcoreapp2.0/_._",
-        "lib/netstandard1.1/System.Buffers.dll",
-        "lib/netstandard1.1/System.Buffers.xml",
-        "lib/netstandard2.0/System.Buffers.dll",
-        "lib/netstandard2.0/System.Buffers.xml",
-        "ref/netcoreapp2.0/_._",
-        "ref/netstandard1.1/System.Buffers.dll",
-        "ref/netstandard1.1/System.Buffers.xml",
-        "ref/netstandard2.0/System.Buffers.dll",
-        "ref/netstandard2.0/System.Buffers.xml",
-        "system.buffers.4.4.0.nupkg.sha512",
-        "system.buffers.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
       ]
     },
     "System.Collections/4.0.11": {
@@ -2663,29 +2316,31 @@
         "system.runtime.nuspec"
       ]
     },
-    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
-      "sha512": "/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
+    "System.Runtime.CompilerServices.Unsafe/4.5.0": {
+      "sha512": "YrzNWduCDHhUaSRBxHxL11UkM2fD6y8hITHis4/LbQZ6vj3vdRjoH3IoPWWC9uDXK2wHIqn+b5gv1Np/VKyM1g==",
       "type": "package",
-      "path": "system.runtime.compilerservices.unsafe/6.0.0",
+      "path": "system.runtime.compilerservices.unsafe/4.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.targets",
-        "buildTransitive/netcoreapp3.1/_._",
-        "lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/net461/System.Runtime.CompilerServices.Unsafe.xml",
-        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+        "lib/uap10.0.16300/_._",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/uap10.0.16300/_._",
+        "system.runtime.compilerservices.unsafe.4.5.0.nupkg.sha512",
         "system.runtime.compilerservices.unsafe.nuspec",
-        "useSharedDesignerContext.txt"
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Runtime.Extensions/4.1.0": {
@@ -3507,63 +3162,6 @@
         "system.xml.xdocument.nuspec"
       ]
     },
-    "Veldrid/4.9.0": {
-      "sha512": "Rvu7/OLNt6Yy/hbC+rAmjBbxcSirbG/BjOdLCF7kl5mGBkMGka3pLuTlkbXSt4UONh3tks0I7k/OJ7Sr8HFIoA==",
-      "type": "package",
-      "path": "veldrid/4.9.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net6.0/Veldrid.dll",
-        "lib/net6.0/Veldrid.pdb",
-        "lib/net6.0/Veldrid.xml",
-        "lib/netstandard2.0/Veldrid.dll",
-        "lib/netstandard2.0/Veldrid.pdb",
-        "lib/netstandard2.0/Veldrid.xml",
-        "veldrid.4.9.0.nupkg.sha512",
-        "veldrid.nuspec"
-      ]
-    },
-    "Veldrid.ImGui/5.72.0": {
-      "sha512": "uv4Ktw9DRP1AZg9qK7DN9hh95zkdPS92kObfNh6iKkbz8SeeQH5ODUpTTrcg6wf7CritSbW6WFlLsdgQX2qwog==",
-      "type": "package",
-      "path": "veldrid.imgui/5.72.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Veldrid.ImGui.dll",
-        "lib/netstandard2.0/Veldrid.ImGui.pdb",
-        "lib/netstandard2.0/Veldrid.ImGui.xml",
-        "veldrid.imgui.5.72.0.nupkg.sha512",
-        "veldrid.imgui.nuspec"
-      ]
-    },
-    "Veldrid.MetalBindings/4.9.0": {
-      "sha512": "9qWYalATCT+/smQzFi2IFyEZpLE1l+A1r3tntKao8sYVAe18+P9rDIvpxyIL4T7Ritfm0JU2TnqckXmLenyfhQ==",
-      "type": "package",
-      "path": "veldrid.metalbindings/4.9.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Veldrid.MetalBindings.dll",
-        "lib/netstandard2.0/Veldrid.MetalBindings.pdb",
-        "veldrid.metalbindings.4.9.0.nupkg.sha512",
-        "veldrid.metalbindings.nuspec"
-      ]
-    },
-    "Veldrid.OpenGLBindings/4.9.0": {
-      "sha512": "Du3zr+qWQO2Pzsl2iOeLmg23gxdr6BQ9yx5ygmcoBn6nm1AsbG4JMeEIpSGDt8WiTmy2VsUNY0kIGZklkrRoWQ==",
-      "type": "package",
-      "path": "veldrid.openglbindings/4.9.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Veldrid.OpenGLBindings.dll",
-        "lib/netstandard2.0/Veldrid.OpenGLBindings.pdb",
-        "veldrid.openglbindings.4.9.0.nupkg.sha512",
-        "veldrid.openglbindings.nuspec"
-      ]
-    },
     "Veldrid.SDL2/4.9.0": {
       "sha512": "uE0sYIzNOF2DPokzjRel2to3euBRikLfgoxx0f7iQVevbDDYlg0e/DBgG+tDhyNQWrB+ttKaQvR/csoa/R8UmA==",
       "type": "package",
@@ -3581,164 +3179,13 @@
         "veldrid.sdl2.4.9.0.nupkg.sha512",
         "veldrid.sdl2.nuspec"
       ]
-    },
-    "Veldrid.StartupUtilities/4.9.0": {
-      "sha512": "45JrS5GajAaoom0HJWtPzYgJlNo8tpXB06mJM4hWxdeBxo3y2OIJIfnnB374KB1d7euodW0XneRzKVhwzZFE5g==",
-      "type": "package",
-      "path": "veldrid.startuputilities/4.9.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Veldrid.StartupUtilities.dll",
-        "lib/netstandard2.0/Veldrid.StartupUtilities.pdb",
-        "veldrid.startuputilities.4.9.0.nupkg.sha512",
-        "veldrid.startuputilities.nuspec"
-      ]
-    },
-    "Veldrid.Utilities/4.9.0": {
-      "sha512": "CJMhzPUmIwqsLFGPizuzPM4mWyL52dPRsK2Ufx2Z4D3O2mNuTZKy22Dnb8ukDLsOgSV9Zm6wL16k3tC41X0M7Q==",
-      "type": "package",
-      "path": "veldrid.utilities/4.9.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Veldrid.Utilities.dll",
-        "lib/netstandard2.0/Veldrid.Utilities.pdb",
-        "lib/netstandard2.1/Veldrid.Utilities.dll",
-        "lib/netstandard2.1/Veldrid.Utilities.pdb",
-        "veldrid.utilities.4.9.0.nupkg.sha512",
-        "veldrid.utilities.nuspec"
-      ]
-    },
-    "Vk/1.0.25": {
-      "sha512": "n1tpY/n9YV7j+wViUD31yc6TQMK3tkcdUXUbJUr3vIVifrRySzq5hpdxUnvC0SvBp8WrbAgowwd1YDvtc+u67A==",
-      "type": "package",
-      "path": "vk/1.0.25",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net5.0/vk.dll",
-        "lib/netstandard1.4/vk.dll",
-        "vk.1.0.25.nupkg.sha512",
-        "vk.nuspec"
-      ]
-    },
-    "Vortice.D3DCompiler/2.3.0": {
-      "sha512": "o7Jimuvr5gXQrriA8JMfNrZX+eiA5NbRPYOpscMICpKE+oKF/CNYXLI5RTQ/NjNpzIsm2QPEehXivL6IS+e40w==",
-      "type": "package",
-      "path": "vortice.d3dcompiler/2.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/Vortice.D3DCompiler.BindMapping.xml",
-        "build/Vortice.D3DCompiler.props",
-        "buildMultiTargeting/Vortice.D3DCompiler.props",
-        "lib/net6.0/Vortice.D3DCompiler.dll",
-        "lib/net6.0/Vortice.D3DCompiler.pdb",
-        "lib/net6.0/Vortice.D3DCompiler.xml",
-        "lib/netstandard2.0/Vortice.D3DCompiler.dll",
-        "lib/netstandard2.0/Vortice.D3DCompiler.pdb",
-        "lib/netstandard2.0/Vortice.D3DCompiler.xml",
-        "vortice.d3dcompiler.2.3.0.nupkg.sha512",
-        "vortice.d3dcompiler.nuspec"
-      ]
-    },
-    "Vortice.Direct3D11/2.3.0": {
-      "sha512": "cNpadAL5HTm2zc3ZJhySGVJWgOD12RSX3OEk96j24rLdigfAbvzTtFJgn68gHviYMwwY76ukcobhJNDWZc4a3w==",
-      "type": "package",
-      "path": "vortice.direct3d11/2.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/Vortice.Direct3D11.BindMapping.xml",
-        "build/Vortice.Direct3D11.props",
-        "buildMultiTargeting/Vortice.Direct3D11.props",
-        "lib/net6.0/Vortice.Direct3D11.dll",
-        "lib/net6.0/Vortice.Direct3D11.pdb",
-        "lib/net6.0/Vortice.Direct3D11.xml",
-        "lib/netstandard2.0/Vortice.Direct3D11.dll",
-        "lib/netstandard2.0/Vortice.Direct3D11.pdb",
-        "lib/netstandard2.0/Vortice.Direct3D11.xml",
-        "vortice.direct3d11.2.3.0.nupkg.sha512",
-        "vortice.direct3d11.nuspec"
-      ]
-    },
-    "Vortice.DirectX/2.3.0": {
-      "sha512": "V+MzrsxG5sLW3PQUlJQ6n3xY8jJGx1l/9Gpy6wbgFuZtDSb9MQmDf/gyfRvrRs1vGNKPht+pg1AJ/qWQrfXJoQ==",
-      "type": "package",
-      "path": "vortice.directx/2.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/Vortice.DirectX.BindMapping.xml",
-        "build/Vortice.DirectX.props",
-        "buildMultiTargeting/Vortice.DirectX.props",
-        "lib/net6.0/Vortice.DirectX.dll",
-        "lib/net6.0/Vortice.DirectX.pdb",
-        "lib/net6.0/Vortice.DirectX.xml",
-        "lib/net7.0/Vortice.DirectX.dll",
-        "lib/net7.0/Vortice.DirectX.pdb",
-        "lib/net7.0/Vortice.DirectX.xml",
-        "lib/netstandard2.0/Vortice.DirectX.dll",
-        "lib/netstandard2.0/Vortice.DirectX.pdb",
-        "lib/netstandard2.0/Vortice.DirectX.xml",
-        "vortice.directx.2.3.0.nupkg.sha512",
-        "vortice.directx.nuspec"
-      ]
-    },
-    "Vortice.DXGI/2.3.0": {
-      "sha512": "eJDvoLjhHMr78+SOSrPIUSr/JboZ7rx62kGrpj2RQZbhP3+pEdHjL+Z6mXLvkEqozFRFspLmTTI7ZnBKfjc9uQ==",
-      "type": "package",
-      "path": "vortice.dxgi/2.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/Vortice.DXGI.BindMapping.xml",
-        "build/Vortice.DXGI.props",
-        "buildMultiTargeting/Vortice.DXGI.props",
-        "lib/net6.0/Vortice.DXGI.dll",
-        "lib/net6.0/Vortice.DXGI.pdb",
-        "lib/net6.0/Vortice.DXGI.xml",
-        "lib/netstandard2.0/Vortice.DXGI.dll",
-        "lib/netstandard2.0/Vortice.DXGI.pdb",
-        "lib/netstandard2.0/Vortice.DXGI.xml",
-        "vortice.dxgi.2.3.0.nupkg.sha512",
-        "vortice.dxgi.nuspec"
-      ]
-    },
-    "Vortice.Mathematics/1.4.25": {
-      "sha512": "V2yJMl/QKceXEjYEnf2EWcNkUJI5/zE04cNUnawHbdR0wjMHv1dVTLf0IUJk0D0w29FrCWdQQK/n4L4vx0HeQA==",
-      "type": "package",
-      "path": "vortice.mathematics/1.4.25",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net6.0/Vortice.Mathematics.dll",
-        "lib/net6.0/Vortice.Mathematics.pdb",
-        "lib/net6.0/Vortice.Mathematics.xml",
-        "lib/net7.0/Vortice.Mathematics.dll",
-        "lib/net7.0/Vortice.Mathematics.pdb",
-        "lib/net7.0/Vortice.Mathematics.xml",
-        "lib/netstandard2.0/Vortice.Mathematics.dll",
-        "lib/netstandard2.0/Vortice.Mathematics.pdb",
-        "lib/netstandard2.0/Vortice.Mathematics.xml",
-        "lib/uap10.0.19041/Vortice.Mathematics.dll",
-        "lib/uap10.0.19041/Vortice.Mathematics.pdb",
-        "lib/uap10.0.19041/Vortice.Mathematics.pri",
-        "lib/uap10.0.19041/Vortice.Mathematics.xml",
-        "vortice.mathematics.1.4.25.nupkg.sha512",
-        "vortice.mathematics.nuspec"
-      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "ImGui.NET >= 1.90.8.1",
-      "Veldrid >= 4.9.0",
-      "Veldrid.ImGui >= 5.72.0",
-      "Veldrid.SDL2 >= 4.9.0",
-      "Veldrid.StartupUtilities >= 4.9.0",
-      "Veldrid.Utilities >= 4.9.0"
+      "SDL2-CS >= 2.0.0",
+      "SDL2.NET >= 1.2.3",
+      "Veldrid.SDL2 >= 4.9.0"
     ]
   },
   "packageFolders": {
@@ -3791,27 +3238,15 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "ImGui.NET": {
+          "SDL2-CS": {
             "target": "Package",
-            "version": "[1.90.8.1, )"
+            "version": "[2.0.0, )"
           },
-          "Veldrid": {
+          "SDL2.NET": {
             "target": "Package",
-            "version": "[4.9.0, )"
-          },
-          "Veldrid.ImGui": {
-            "target": "Package",
-            "version": "[5.72.0, )"
+            "version": "[1.2.3, )"
           },
           "Veldrid.SDL2": {
-            "target": "Package",
-            "version": "[4.9.0, )"
-          },
-          "Veldrid.StartupUtilities": {
-            "target": "Package",
-            "version": "[4.9.0, )"
-          },
-          "Veldrid.Utilities": {
             "target": "Package",
             "version": "[4.9.0, )"
           }
