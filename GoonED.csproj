@@ -5,21 +5,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\.nuget\packages\sdl2.bindings\1.0.0\lib\netstandard2.1\SDL2.Bindings.dll" Link="SDL2.Bindings.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\.nuget\packages\sdl2.net\1.2.3\lib\net6.0\SDL2.NET.dll" Link="SDL2.NET.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Remove="res\shaders\debug.shader" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SDL2-CS" Version="2.0.0" />
-    <PackageReference Include="SDL2.NET" Version="1.2.3" />
-    <PackageReference Include="Veldrid.SDL2" Version="4.9.0" />
+    <EmbeddedResource Include="res\shaders\debug.shader" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.90.8.1" />
+    <PackageReference Include="Json.Net" Version="1.0.33" />
+    <PackageReference Include="OpenTK" Version="4.8.2" />
+    <PackageReference Include="StbImageSharp" Version="2.27.14" />
+    <PackageReference Include="StbiSharp" Version="1.2.1" />
   </ItemGroup>
 
 </Project>
