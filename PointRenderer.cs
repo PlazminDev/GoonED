@@ -100,6 +100,12 @@ namespace GoonED
             points.Add(new Point(point, color, lifetime));
         }
 
+        public static void AddPoint(float startX, float startY, float r, float g, float b, int lifetime)
+        {
+            if (points.Count >= MAX_POINTS) { Console.WriteLine("Too many points!"); return; }
+            points.Add(new Point(startX, startY, r, g, b, lifetime));
+        }
+
         public static void Draw(Camera camera)
         {
             if (points.Count <= 0) return;
@@ -119,10 +125,10 @@ namespace GoonED
                 index += 6;
             }
 
-            //Console.WriteLine(points[0]);
+            //Console.WriteLine(string.Join(",", vertexArray[0..18]));
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
-            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(index * 2), vertexArray);
+            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr)(index * sizeof(float)), vertexArray);
 
             pointShader.Bind();
             pointShader.SetMatrix("projectionMatrix", camera.ProjectionMatrix);
@@ -132,7 +138,7 @@ namespace GoonED
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
 
-            GL.DrawArrays(PrimitiveType.Points, 0, index * 2);
+            GL.DrawArrays(PrimitiveType.Points, 0, points.Count);
 
             GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);

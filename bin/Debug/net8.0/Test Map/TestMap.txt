@@ -1,0 +1,544 @@
+Global
+{
+editor_version_major = 0;
+editor_version_minor = 7;
+editor_version_revision = 7;
+map_version_major = 1;
+map_version_minor = 7;
+acesdata_version = 14;
+default_texture_scale = 0.5;
+skybox = 3;
+skybox_rotation = 0;
+skybox_height_offset = 0.4;
+fog_density = 0.0075;
+fog_color = 0.6737489, 0.7926024, 0.9900501, 1;
+weather = 0;
+backup_index = 2;
+}
+
+
+LayerInfo
+{
+id = 0;
+name = Layer "0";
+}
+
+
+LayerInfo
+{
+id = 1;
+name = Layer "1";
+}
+
+
+LayerInfo
+{
+id = 2;
+name = Layer "2";
+}
+
+
+LayerInfo
+{
+id = 3;
+name = Layer "3";
+}
+
+
+LayerInfo
+{
+id = 4;
+name = Layer "4";
+}
+
+
+LayerInfo
+{
+id = 5;
+name = Layer "5";
+}
+
+
+LayerInfo
+{
+id = 6;
+name = Layer "6";
+}
+
+
+LayerInfo
+{
+id = 7;
+name = Layer "7";
+}
+
+
+LayerInfo
+{
+id = 8;
+name = Layer "8";
+}
+
+
+LayerInfo
+{
+id = 9;
+name = Layer "9";
+}
+
+Vertex // 0
+{
+x = -2;
+z = -1;
+}
+
+Vertex // 1
+{
+x = -2;
+z = 1;
+}
+
+Vertex // 2
+{
+x = -1;
+z = 2;
+}
+
+Vertex // 3
+{
+x = 1;
+z = 2;
+}
+
+Vertex // 4
+{
+x = 2;
+z = 1;
+}
+
+Vertex // 5
+{
+x = 2;
+z = -1;
+}
+
+Vertex // 6
+{
+x = 1;
+z = -2;
+}
+
+Vertex // 7
+{
+x = -1;
+z = -2;
+}
+
+Vertex // 8
+{
+x = -3;
+z = -1;
+}
+
+Vertex // 9
+{
+x = -3;
+z = 1;
+}
+
+Vertex // 10
+{
+x = -5;
+z = 1;
+}
+
+Vertex // 11
+{
+x = -5;
+z = -1;
+}
+
+Vertex // 12
+{
+x = 3;
+z = -1;
+}
+
+Vertex // 13
+{
+x = 5;
+z = -1;
+}
+
+Vertex // 14
+{
+x = 4;
+z = 1;
+}
+
+Vertex // 15
+{
+x = -0;
+z = 3;
+}
+
+Vertex // 16
+{
+x = 1;
+z = 4;
+}
+
+Vertex // 17
+{
+x = 0;
+z = 5;
+}
+
+Vertex // 18
+{
+x = -1;
+z = 4;
+}
+
+Line // 0
+{
+v1 = 0;
+v2 = 1;
+}
+
+Line // 1
+{
+v1 = 1;
+v2 = 2;
+}
+
+Line // 2
+{
+v1 = 2;
+v2 = 3;
+}
+
+Line // 3
+{
+v1 = 3;
+v2 = 4;
+}
+
+Line // 4
+{
+v1 = 4;
+v2 = 5;
+}
+
+Line // 5
+{
+v1 = 5;
+v2 = 6;
+}
+
+Line // 6
+{
+v1 = 6;
+v2 = 7;
+}
+
+Line // 7
+{
+v1 = 7;
+v2 = 8;
+}
+
+Line // 8
+{
+v1 = 8;
+v2 = 9;
+}
+
+Line // 9
+{
+v1 = 9;
+v2 = 10;
+}
+
+Line // 10
+{
+v1 = 10;
+v2 = 11;
+}
+
+Line // 11
+{
+v1 = 11;
+v2 = 12;
+}
+
+Line // 12
+{
+v1 = 12;
+v2 = 13;
+}
+
+Line // 13
+{
+v1 = 13;
+v2 = 14;
+}
+
+Line // 14
+{
+v1 = 14;
+v2 = 15;
+}
+
+Line // 15
+{
+v1 = 15;
+v2 = 16;
+}
+
+Line // 16
+{
+v1 = 16;
+v2 = 17;
+}
+
+Line // 17
+{
+v1 = 17;
+v2 = 18;
+}
+
+Line // 18
+{
+v1 = 18;
+v2 = 19;
+}
+
+Side // 0
+{
+lines = 0;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 1
+{
+lines = 1;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 2
+{
+lines = 2;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 3
+{
+lines = 3;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 4
+{
+lines = 4;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 5
+{
+lines = 5;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 6
+{
+lines = 6;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 7
+{
+lines = 7;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 8
+{
+lines = 8;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 9
+{
+lines = 9;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 10
+{
+lines = 10;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 11
+{
+lines = 11;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 12
+{
+lines = 12;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 13
+{
+lines = 13;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 14
+{
+lines = 14;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 15
+{
+lines = 15;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 16
+{
+lines = 16;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 17
+{
+lines = 17;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Side // 18
+{
+lines = 18;
+sector = -1;
+side_plane( );
+side_texture( path = "Editor/Default.png"; scale = 1,1; )
+}
+
+Sector // 0
+{
+layer = 0;
+vertices = 0,1,2,3,4,5,6,7,;
+lines = 0,1,2,3,4,5,6,7,;
+height_floor = 10;
+height_ceiling = 0;
+lighting = 1, 1, 1, 1;
+floor_slope ( sloped = False; direction = 0; height = 0; )
+ceiling_slope( sloped = False; direction = 0; height = 0; )
+floor_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+ceiling_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+floor_plane(visible = True; solid = True; brightness_offset = 0; )
+ceiling_plane(visible = True; solid = True; brightness_offset = 0; )
+}
+
+Sector // 1
+{
+layer = 0;
+vertices = 11,10,9,8,;
+lines = 8,9,10,11,;
+height_floor = 10;
+height_ceiling = 0;
+lighting = 1, 1, 1, 1;
+floor_slope ( sloped = False; direction = 0; height = 0; )
+ceiling_slope( sloped = False; direction = 0; height = 0; )
+floor_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+ceiling_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+floor_plane(visible = True; solid = True; brightness_offset = 0; )
+ceiling_plane(visible = True; solid = True; brightness_offset = 0; )
+}
+
+Sector // 2
+{
+layer = 0;
+vertices = 14,13,12,;
+lines = 12,13,14,;
+height_floor = 10;
+height_ceiling = 0;
+lighting = 1, 1, 1, 1;
+floor_slope ( sloped = False; direction = 0; height = 0; )
+ceiling_slope( sloped = False; direction = 0; height = 0; )
+floor_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+ceiling_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+floor_plane(visible = True; solid = True; brightness_offset = 0; )
+ceiling_plane(visible = True; solid = True; brightness_offset = 0; )
+}
+
+Sector // 3
+{
+layer = 0;
+vertices = 18,17,16,15,;
+lines = 15,16,17,18,;
+height_floor = 10;
+height_ceiling = 0;
+lighting = 1, 1, 1, 1;
+floor_slope ( sloped = False; direction = 0; height = 0; )
+ceiling_slope( sloped = False; direction = 0; height = 0; )
+floor_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+ceiling_texture(path = "Editor/Default.png"; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )
+floor_plane(visible = True; solid = True; brightness_offset = 0; )
+ceiling_plane(visible = True; solid = True; brightness_offset = 0; )
+}
+
+Thing // 0
+{
+layer = 0;
+x = 0;
+y = 10;
+z = 0;
+definition_id = 13484;
+angle = 90;
+height = 0;
+height_mode = 0;
+}
+

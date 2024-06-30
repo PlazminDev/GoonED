@@ -6,7 +6,7 @@ namespace GoonED
 {
     public class LineRenderer
     {
-        private static int MAX_LINES = 2048;
+        private static int MAX_LINES = 500;
 
         private static float[] vertexArray = new float[MAX_LINES * 6 * 2];
 
@@ -39,7 +39,7 @@ namespace GoonED
                 this.lifetime = lifetime;
             }
 
-            public int beginFrame()
+            public int BeginFrame()
             {
                 this.lifetime--;
                 return this.lifetime;
@@ -83,7 +83,7 @@ namespace GoonED
 
             for (int i = 0; i < lines.Count; i++)
             {
-                if (lines[i].beginFrame() < 0)
+                if (lines[i].BeginFrame() < 0)
                 {
                     lines.RemoveAt(i);
                     i--;
@@ -121,7 +121,7 @@ namespace GoonED
             }
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
-            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(index * 2), vertexArray);
+            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, new IntPtr(index * sizeof(float)), vertexArray);
 
             lineShader.Bind();
             lineShader.SetMatrix("projectionMatrix", camera.ProjectionMatrix);
@@ -131,7 +131,7 @@ namespace GoonED
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
 
-            GL.DrawArrays(PrimitiveType.Lines, 0, index);
+            GL.DrawArrays(PrimitiveType.Lines, 0, lines.Count);
 
             GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);
