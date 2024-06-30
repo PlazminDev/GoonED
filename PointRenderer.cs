@@ -151,6 +151,8 @@ namespace GoonED
         {
             GL.DeleteBuffer(vboID);
             GL.DeleteVertexArray(vaoID);
+
+            pointShader.Cleanup();
         }
     }
 }

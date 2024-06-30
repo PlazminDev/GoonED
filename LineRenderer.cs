@@ -144,6 +144,8 @@ namespace GoonED
         {
             GL.DeleteBuffer(vboID);
             GL.DeleteVertexArray(vaoID);
+
+            lineShader.Cleanup();
         }
     }
 }

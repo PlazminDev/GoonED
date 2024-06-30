@@ -296,6 +296,9 @@ namespace GoonED
                 ImGui.End();
 
                 ImGui.Begin("Setup");
+                ImGui.Text("Welcome to GoonED");
+                ImGui.Text("Read the README for instructions");
+                ImGui.Dummy(new Vector2f(0.0f, 10.0f));
                 ImGui.Text("Enter the path to your AcesData folder.");
                 ImGui.InputText("###", TempAcesPath, 256);
                 if(ImGui.Button("Confirm"))
@@ -525,8 +528,8 @@ namespace GoonED
             infoFile.AppendLine(@"secret_count = 0;");
             infoFile.AppendLine(@"loading_screen_ambience = 9;");
             infoFile.AppendLine(@"loading_screen_music = 27;");
-            infoFile.AppendLine(@"world_file_name = "+ Regex.Replace(_mapName, @"\s+", "") + ".txt;");
-            infoFile.AppendLine(@"world_file_name = ""Level 1"", ""Note Backgrounds"";");
+            infoFile.AppendLine(@"world_file_name = """+ Regex.Replace(_mapName, @"\s+", "") + @".txt"";");
+            infoFile.AppendLine(@"sprite_groups = ""Level 1"", ""Note Backgrounds"";");
             infoFile.AppendLine(@"always_unlocked = true;");
             infoFile.AppendLine(@"description_text = ""Custom Level Description"";");
             infoFile.AppendLine(@"faction_name = 0 ""Glasshearts"";");

@@ -10,12 +10,14 @@
 
   <ItemGroup>
     <None Remove="res\shaders\debug.shader" />
+    <None Remove="res\shaders\sprite.shader" />
     <None Remove="res\textures\loading.jpg" />
     <None Remove="res\textures\poster.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="res\shaders\debug.shader" />
+    <EmbeddedResource Include="res\shaders\sprite.shader" />
     <EmbeddedResource Include="res\textures\loading.jpg" />
     <EmbeddedResource Include="res\textures\poster.png" />
   </ItemGroup>
