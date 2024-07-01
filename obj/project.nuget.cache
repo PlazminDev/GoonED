@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PxNdVyxWv1I=",
+  "dgSpecHash": "gfXAlshv+2I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\David\\Desktop\\GoonED\\GoonED\\GoonED.csproj",
+  "projectFilePath": "C:\\Users\\David\\Desktop\\GoonED\\GoonED.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\David\\.nuget\\packages\\imgui.net\\1.90.8.1\\imgui.net.1.90.8.1.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\json.net\\1.0.33\\json.net.1.0.33.nupkg.sha512",

@@ -948,12 +948,15 @@ namespace GoonED
 
             _ImGuiController.MouseScroll(e.Offset);
 
-            if(e.OffsetY > 0 && _camera.orthographicSize > 0.55f)
-                _camera.orthographicSize /= zoomSpeed;
-            else if(_camera.orthographicSize < 54.0f)
-                _camera.orthographicSize *= zoomSpeed;
+            if(!inputConsumed)
+            {
+                if (e.OffsetY > 0 && _camera.orthographicSize > 0.55f)
+                    _camera.orthographicSize /= zoomSpeed;
+                else if (_camera.orthographicSize < 54.0f)
+                    _camera.orthographicSize *= zoomSpeed;
 
-            _camera.RefreshMatrix(ClientSize.X, ClientSize.Y);
+                _camera.RefreshMatrix(ClientSize.X, ClientSize.Y);
+            }
         }
 
         Vector2 dragOrigin = Vector2.Zero;
