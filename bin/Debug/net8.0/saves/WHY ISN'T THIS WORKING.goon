@@ -1,3 +1,0 @@
-// DO NOT REMOVE THIS
-// Do not use this as the actual map file, this is just a save file for GoonED, if you wanna get this as a Fallen Aces map, use the Export button.
-{"Vertices":[{"x":5,"y":1},{"x":-5,"y":-1}],"Lines":[{"a":0,"b":1,"sector":-1}],"Sectors":[{"vertices":[0,1],"lines":[0],"floor":10,"ceiling":5,"layer":0}]}

@@ -86,6 +86,7 @@ namespace GoonED
                 return null;
             }
 
+            StbImage.stbi_set_flip_vertically_on_load(1);
             using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
             {
                 return ImageResult.FromStream(stream);

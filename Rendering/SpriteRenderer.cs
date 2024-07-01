@@ -86,6 +86,7 @@ namespace GoonED.Rendering
                 spriteShader.SetMatrix("modelMatrix", sprite.GetModelMatrix());
 
                 spriteShader.SetInt("textureSampler", 0);
+                spriteShader.SetFloat("alpha", sprite.alpha);
 
                 sprite.texture.Bind();
 

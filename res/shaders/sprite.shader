@@ -21,10 +21,13 @@ void main() {
 in vec2 uv;
 
 uniform sampler2D textureSampler;
+uniform float alpha;
 
 out vec4 out_color;
 
 void main() {
 	//out_color = vec4(uv.x, uv.y, 0, 1);
-	out_color = texture(textureSampler, uv);
+
+	vec4 col = texture(textureSampler, uv);
+	out_color = vec4(col.x, col.y, col.z, col.w * alpha);
 }

@@ -7,6 +7,7 @@ namespace GoonED.Rendering
         public Vector2 position { get; set; } = new();
         public float rotation = 0.0f;
         public Texture texture;
+        public float alpha = 1.0f;
 
         public Sprite(Vector2 position, float rotation, Texture tex)
         {
@@ -22,6 +23,12 @@ namespace GoonED.Rendering
             modelMatrix *= Matrix4.CreateTranslation(position.X, position.Y, -9.0f);
 
             return modelMatrix;
+        }
+
+        public Sprite SetAlpha(float alpha)
+        {
+            this.alpha = alpha;
+            return this;
         }
     }
 }
