@@ -2,6 +2,9 @@
 
 A custom Fallen Aces map editor for creating simple levels before the full level editor releases later this year
 
+![Screenshot 2024-07-01 132047](https://github.com/PlazminDev/GoonED/assets/95005820/21f8eb8c-8187-49a7-8aa8-08b01e46f1fc)
+![Screenshot 2024-07-01 132042](https://github.com/PlazminDev/GoonED/assets/95005820/98d2df2b-f77e-4aad-9aad-1388c44de402)
+
 ## Controls:
 
 Right Click: Add Vertices & Build Sectors
