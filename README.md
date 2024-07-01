@@ -20,6 +20,8 @@ Left Click + Shift: Select Entity
 Z: Remove Last Sector
 Shift+Z: Remove Last Entity
 
+Scroll Wheel: Zoom
+
 ## How to play custom maps
 
 - Press the Export button to export your map to a Fallen Aces map
