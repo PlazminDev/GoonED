@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GoonED")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a34ba010abab918cc266587b1c884cb99c3b677")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0caed888ec08aeeea11abc16c86bf915522bb5d")]
 [assembly: System.Reflection.AssemblyProductAttribute("GoonED")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GoonED")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

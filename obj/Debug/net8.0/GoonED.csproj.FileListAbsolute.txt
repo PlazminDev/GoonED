@@ -43,3 +43,4 @@ C:\Users\David\Desktop\GoonED\GoonED\bin\Debug\net8.0\runtimes\osx-x64\native\li
 C:\Users\David\Desktop\GoonED\GoonED\bin\Debug\net8.0\runtimes\win-x64\native\stbi.dll
 C:\Users\David\Desktop\GoonED\GoonED\bin\Debug\net8.0\runtimes\win-x64\native\stbi.lib
 C:\Users\David\Desktop\GoonED\GoonED\bin\Debug\net8.0\Json.Net.dll
+C:\Users\David\Desktop\GoonED\GoonED\bin\Debug\net8.0\README.md
