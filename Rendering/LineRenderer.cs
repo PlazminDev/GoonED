@@ -6,7 +6,7 @@ namespace GoonED.Rendering
 {
     public class LineRenderer
     {
-        private static int MAX_LINES = 500;
+        private static int MAX_LINES = 2048;
 
         private static float[] vertexArray = new float[MAX_LINES * 6 * 2];
 
@@ -93,7 +93,7 @@ namespace GoonED.Rendering
 
         public static void AddLine(Vector2 from, Vector2 to, Vector3 color, int lifetime)
         {
-            if (lines.Count >= MAX_LINES) { Console.WriteLine("Too many lines!"); return; }
+            if (lines.Count >= MAX_LINES) { /*Console.WriteLine("Too many lines!");*/ return; }
             lines.Add(new Line(new Vector2(from.X, from.Y), new Vector2(to.X, to.Y), color, lifetime));
         }
 

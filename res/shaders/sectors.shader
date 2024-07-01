@@ -13,9 +13,9 @@ void main()
 #shader fragment
 #version 330 core
 
-uniform float alpha;
-
 out vec4 color;
+
+uniform float alpha;
 
 void main()
 {

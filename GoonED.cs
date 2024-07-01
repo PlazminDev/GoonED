@@ -101,7 +101,7 @@ namespace GoonED
                 {
                     _vertices[(i * 3) + 0] = map.Vertices[vertices[i]].X;
                     _vertices[(i * 3) + 1] = map.Vertices[vertices[i]].Y;
-                    _vertices[(i * 3) + 2] = -10.0f;
+                    _vertices[(i * 3) + 2] = -7.5f;
                 }
                 //Console.WriteLine(string.Join(",", _vertices));
 
@@ -330,6 +330,18 @@ namespace GoonED
                     map.Sectors[hoveredSector].hovered = false;
                 hoveredSector = -1;
             }
+
+            for (int i = 0; i < map.Sectors.Count; i++)
+            {
+                if (selectedSector != i || map.Sectors[i].layer != layer)
+                {
+                    map.Sectors[i].selected = false;
+                }
+                if (hoveredSector != i || map.Sectors[i].layer != layer)
+                {
+                    map.Sectors[i].hovered = false;
+                }
+            }
         }
 
         private bool inputConsumed = false;
@@ -383,6 +395,7 @@ namespace GoonED
             DrawLines();
             DrawVertices();
 
+            //GL.Enable(EnableCap.DepthTest);
             LineRenderer.Draw(_camera);
             PointRenderer.Draw(_camera);
             sectorRenderer.Render(map.Sectors, _camera);
@@ -409,7 +422,8 @@ namespace GoonED
                 if (map.Things[i].id == 10003)
                     tex = wiseguy;
 
-                temp.Add(new Sprite(new Vector2((float)map.Things[i].x, (float)map.Things[i].z), (float)map.Things[i].angle, tex).SetAlpha(selectedThing == i ? 1.0f : 0.6f));
+                temp.Add(new Sprite(new Vector2((float)map.Things[i].x, (float)map.Things[i].z), (float)map.Things[i].angle, tex)
+                    .SetAlpha(selectedThing == i ? 1.0f : hoveredThing == i ? 0.8f : 0.6f));
             }
 
             if(shiftDown)
@@ -422,6 +436,7 @@ namespace GoonED
             //temp.Add(new Sprite(new Vector2(-3, -2), 35.0f, mike));
 
             spriteRenderer.Render(temp, _camera);
+            //GL.Disable(EnableCap.DepthTest);
 
             //ImGui.DockSpaceOverViewport();
 
@@ -857,7 +872,7 @@ namespace GoonED
                 mapFile.AppendLine("y = " + things[i].y + ";");
                 mapFile.AppendLine("z = " + things[i].z + ";");
                 mapFile.AppendLine("definition_id = " + things[i].id + ";");
-                mapFile.AppendLine("angle = " + (-things[i].angle + 90) + ";");
+                mapFile.AppendLine("angle = " + (things[i].angle + 90) + ";");
                 mapFile.AppendLine("height = 0;");
                 mapFile.AppendLine("height_mode = 0;");
 
@@ -922,21 +937,30 @@ namespace GoonED
         {
             base.OnTextInput(e);
 
-
             _ImGuiController.PressChar((char)e.Unicode);
         }
+
+        const float zoomSpeed = 1.2f;
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
 
             _ImGuiController.MouseScroll(e.Offset);
+
+            if(e.OffsetY > 0 && _camera.orthographicSize > 0.55f)
+                _camera.orthographicSize /= zoomSpeed;
+            else if(_camera.orthographicSize < 54.0f)
+                _camera.orthographicSize *= zoomSpeed;
+
+            _camera.RefreshMatrix(ClientSize.X, ClientSize.Y);
         }
 
         Vector2 dragOrigin = Vector2.Zero;
         int hoveredSector = -1;
         int selectedSector = -1;
 
+        int hoveredThing = -1;
         int selectedThing = -1;
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -954,23 +978,42 @@ namespace GoonED
                 _camera.position.Y = targetPosition.Y;
             }
 
-            bool sectorHovered = false;
-            for (int i = 0; i < map.Sectors.Count; i++)
+            if(!shiftDown)
             {
-                if(map.Sectors[i].layer == layer && PointInSector(cameraPos.X, cameraPos.Y, map.Sectors[i]))
+                hoveredThing = -1;
+                bool sectorHovered = false;
+                for (int i = 0; i < map.Sectors.Count; i++)
                 {
-                    sectorHovered = true;
-                    hoveredSector = i;
-                    map.Sectors[hoveredSector].hovered = true;
-                    break;
+                    if (map.Sectors[i].layer == layer && PointInSector(cameraPos.X, cameraPos.Y, map.Sectors[i]))
+                    {
+                        sectorHovered = true;
+                        hoveredSector = i;
+                        map.Sectors[hoveredSector].hovered = true;
+                        break;
+                    }
+                }
+
+                if (!sectorHovered)
+                {
+                    if (hoveredSector != -1 && hoveredSector < map.Sectors.Count)
+                    {
+                        map.Sectors[hoveredSector].hovered = false;
+                    }
+                    hoveredSector = -1;
                 }
             }
-
-            if (!sectorHovered) 
-            { 
-                if(hoveredSector != -1 && hoveredSector < map.Sectors.Count)
+            else
+            {
+                hoveredThing = -1;
+                Vector2 mPos = _camera.GetRelativeMousePos(MousePosition);
+                for (int i = 0; i < map.Things.Count; i++)
                 {
-                    map.Sectors[hoveredSector].hovered = false;
+                    Console.WriteLine(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)));
+                    if (Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)) < 1.0f)
+                    {
+                        hoveredThing = i;
+                        break;
+                    }
                 }
                 hoveredSector = -1;
             }
@@ -1285,5 +1328,7 @@ namespace GoonED
             if (e.Button == MouseButton.Middle)
                 middleMouse = false;
         }
+
+
     }
 }
