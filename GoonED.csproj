@@ -15,10 +15,12 @@
     <None Remove="res\shaders\sprite.shader" />
     <None Remove="res\textures\goon.png" />
     <None Remove="res\textures\loading.jpg" />
+    <None Remove="res\textures\malone.png" />
     <None Remove="res\textures\mike.png" />
     <None Remove="res\textures\mook.png" />
     <None Remove="res\textures\poster.png" />
     <None Remove="res\textures\unknown.png" />
+    <None Remove="res\textures\unloadedtex.png" />
     <None Remove="res\textures\wiseguy.png" />
   </ItemGroup>
 
@@ -28,10 +30,12 @@
     <EmbeddedResource Include="res\shaders\sprite.shader" />
     <EmbeddedResource Include="res\textures\goon.png" />
     <EmbeddedResource Include="res\textures\loading.jpg" />
+    <EmbeddedResource Include="res\textures\malone.png" />
     <EmbeddedResource Include="res\textures\mike.png" />
     <EmbeddedResource Include="res\textures\mook.png" />
     <EmbeddedResource Include="res\textures\poster.png" />
     <EmbeddedResource Include="res\textures\unknown.png" />
+    <EmbeddedResource Include="res\textures\unloadedtex.png" />
     <EmbeddedResource Include="res\textures\wiseguy.png" />
   </ItemGroup>
 

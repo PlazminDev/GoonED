@@ -14,7 +14,7 @@ namespace GoonED.Rendering
             shader = new Shader(Shader.ParseShader("sectors.shader"), true);
         }
 
-        public void Render(List<Sector> sectors, Camera _camera, AceTextures textures)
+        public void Render(List<Sector> sectors, Camera _camera, AceTextures textures, string[] packages, int currentPackage, Texture unloadedTex)
         {
             shader.Bind();
 
@@ -37,14 +37,20 @@ namespace GoonED.Rendering
 
                 shader.SetFloat("alpha", alpha);
 
-                textures.GetTexture(sector.TextureIndex).Bind();
+                var tex = unloadedTex;
+                if(packages[currentPackage] == sector.texturePackage)
+                {
+                    tex = textures.GetTexture(sector.TextureIndex());
+                }
+
+                tex.Bind();
 
                 GL.BindVertexArray(sector.GetVaoID());
                 GL.EnableVertexAttribArray(0);
                 GL.EnableVertexAttribArray(1);
                 GL.DrawElements(BeginMode.Triangles, sector.indices.Length, DrawElementsType.UnsignedInt, 0);
 
-                textures.GetTexture(sector.TextureIndex).Unbind();
+                tex.Unbind();
             }
 
             GL.DisableVertexAttribArray(0);

@@ -122,14 +122,14 @@ namespace GoonED.Rendering
             }
         }
 
-        Texture[] textures;
+        ATexture[] textures;
         TextureEntry[] entries;
 
         bool init = false;
 
-        public void Load(string path)
+        public async void Load(string path, string package)
         {
-            using (FileStream textureStream = File.Open(path + "/Texture Packages/textures1.bin", FileMode.Open))
+            using (FileStream textureStream = File.Open(path + "/Texture Packages/"+ package + ".bin", FileMode.Open))
             {
                 using (BinaryReader reader = new BinaryReader(textureStream))
                 {
@@ -143,7 +143,7 @@ namespace GoonED.Rendering
                     int count = reader.ReadInt32();
                     Console.WriteLine("Count: " + count);
 
-                    textures = new Texture[count];
+                    textures = new ATexture[count];
                     entries = new TextureEntry[count];
 
                     // Get headers
@@ -226,10 +226,10 @@ namespace GoonED.Rendering
                         }
                         else
                         {
-                            return;
+                            continue;
                         }
 
-                        textures[i] = new Texture(width, height, data);
+                        textures[i] = new ATexture(width, height, data, package);
                     }
 
                     init = true;
@@ -246,7 +246,7 @@ namespace GoonED.Rendering
             for (int i = 0; i < textures.Length; i++) { textures[i].Cleanup(); }
         }
 
-        public Texture GetTexture(int i)
+        public ATexture GetTexture(int i)
         {
             return textures[i];
         }

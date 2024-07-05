@@ -28,6 +28,7 @@ namespace GoonED
         private Vector3 RED_V3 = new Vector3(1.0f, 0.0f, 0.0f);
 
         private Dictionary<string, Texture> Textures = new Dictionary<string, Texture>();
+        Texture unloadedTex;
 
         // Map parameters
         private byte[] mapName = new byte[32];
@@ -47,6 +48,7 @@ namespace GoonED
         SpriteRenderer spriteRenderer;
 
         bool loadPrompt = false;
+        float gridSize = 1;
 
         // Other
         int startEditIndex_Vertex = -1;
@@ -72,14 +74,15 @@ namespace GoonED
             private int[] vbos;
             private int vaoID;
 
-            private int textureIndex;
+            public string texturePackage;
+            public int textureIndex;
 
             public bool hovered = false;
             public bool selected = false;
 
             public Sector() { }
 
-            public Sector(int[] vertices, int[] lines, double floor, double ceiling, int layer)
+            public Sector(int[] vertices, int[] lines, double floor, double ceiling, int layer, string texturePackage)
             {
                 this.vertices = vertices;
                 this.lines = lines;
@@ -87,6 +90,7 @@ namespace GoonED
                 this.ceiling = ceiling;
                 this.layer = layer;
 
+                this.texturePackage = texturePackage;
                 this.textureIndex = 0;
 
                 lx = 1;
@@ -143,11 +147,13 @@ namespace GoonED
                 GL.BindVertexArray(0);
             }
 
-            public int TextureIndex => textureIndex;
+            public int TextureIndex() { return textureIndex; }
 
-            public void SetTextureIndex(int i)
+
+            public void SetTextureIndex(int i, string package)
             {
                 this.textureIndex = i;
+                this.texturePackage = package;
             }
 
 
@@ -311,6 +317,9 @@ namespace GoonED
             Textures.Add("Goon", new Texture("goon.png"));
             Textures.Add("Mook", new Texture("mook.png"));
             Textures.Add("Wiseguy", new Texture("wiseguy.png"));
+            Textures.Add("Malone", new Texture("malone.png"));
+
+            unloadedTex = new Texture("unloadedtex.png");
 
             byte[] nameStart = new UTF8Encoding(true).GetBytes("New Map");
             for(int i = 0; i < nameStart.Length; i++)
@@ -326,7 +335,7 @@ namespace GoonED
             if (File.Exists("user.ini"))
             {
                 AcesDataPath = File.ReadAllText("user.ini");
-                aceTextures.Load(AcesDataPath);
+                aceTextures.Load(AcesDataPath, texturePackages[0]);
             }
         }
 
@@ -382,6 +391,7 @@ namespace GoonED
         }
 
         private bool inputConsumed = false;
+        int g = 0;
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
@@ -436,18 +446,33 @@ namespace GoonED
             DrawLines();
             DrawVertices();
 
+            if (!shiftDown && !inputConsumed)
+            {
+                Vector2 _mp = _camera.GetRelativeMousePos(MousePosition);
+                _mp.X = MathF.Round(_mp.X / gridSize) * gridSize;
+                _mp.Y = MathF.Round(_mp.Y / gridSize) * gridSize;
+
+                if (g < 0)
+                {
+                    LineRenderer.AddLine(new Vector2(_mp.X, _mp.Y - 1), new Vector2(_mp.X, _mp.Y + 1), new Vector4(1.0f, 0.5f, 0.0f, 1.0f), 1);
+                    LineRenderer.AddLine(new Vector2(_mp.X - 1, _mp.Y), new Vector2(_mp.X + 1, _mp.Y), new Vector4(1.0f, 0.5f, 0.0f, 1.0f), 1);
+                }
+
+                PointRenderer.AddPoint(_mp, YELLOW_V3, 1);
+            }
+
             List<Sprite> temp = new List<Sprite>();
             Textures.TryGetValue("Unknown", out Texture unknown);
             Textures.TryGetValue("Mike", out Texture mike);
-            //Texture mike = aceTextures.GetTexture(0);
             Textures.TryGetValue("Goon", out Texture goon);
             Textures.TryGetValue("Mook", out Texture mook);
             Textures.TryGetValue("Wiseguy", out Texture wiseguy);
+            Textures.TryGetValue("Malone", out Texture malone);
 
             //GL.Enable(EnableCap.DepthTest);
             LineRenderer.Draw(_camera);
             PointRenderer.Draw(_camera);
-            sectorRenderer.Render(map.Sectors, _camera, aceTextures);
+            sectorRenderer.Render(map.Sectors, _camera, aceTextures, texturePackages, currentTexturePackage, unloadedTex);
 
             for(int i = 0; i < map.Things.Count; i++)
             {
@@ -463,6 +488,8 @@ namespace GoonED
                     tex = mook;
                 if (map.Things[i].id == 10003)
                     tex = wiseguy;
+                if (map.Things[i].id == 10004)
+                    tex = malone;
 
                 temp.Add(new Sprite(new Vector2((float)map.Things[i].x, (float)map.Things[i].z), (float)map.Things[i].angle, tex)
                     .SetAlpha(selectedThing == i ? 1.0f : hoveredThing == i ? 0.8f : 0.6f));
@@ -534,7 +561,13 @@ namespace GoonED
                     layer = 99;
                 }
 
-                if(selectedSector != -1)
+                if (ImGui.Button("-###GRIDSIZE") && g > -4) { gridSize /= 2.0f; g--; }
+                ImGui.SameLine();
+                if (ImGui.Button("+###GRIDSIZEPLUS") && g < 2) { gridSize *= 2.0f; g++; }
+                ImGui.SameLine();
+                ImGui.TextUnformatted("Snap Size: " + gridSize.ToString());
+
+                if (selectedSector != -1)
                 {
                     map.Sectors[selectedSector].selected = true;
                     //map.Sectors[selectedSector].hovered = false;
@@ -644,6 +677,7 @@ namespace GoonED
                     if (ImGui.Button("Goon")) { map.Things[selectedThing].id = 10001; }
                     if (ImGui.Button("Mook")) { map.Things[selectedThing].id = 10002; }
                     if (ImGui.Button("Wiseguy")) { map.Things[selectedThing].id = 10003; }
+                    if (ImGui.Button("Malone")) { map.Things[selectedThing].id = 10004; }
 
                     ImGui.Dummy(new Vector2f(0.0f, 10.0f));
 
@@ -694,7 +728,7 @@ namespace GoonED
                         file.Write(Encoding.UTF8.GetBytes(AcesDataPath));
                         file.Close();
 
-                        aceTextures.Load(AcesDataPath);
+                        aceTextures.Load(AcesDataPath, texturePackages[0]);
                     }
                 }
                 if (AcesDataPathAlertTimer > 0.0f)
@@ -758,10 +792,7 @@ namespace GoonED
             //ImGui.ColorEdit3("Fog Color", ref fogColor);
             ImGui.End();
 
-            if(selectedSector >= 0)
-            {
-                DrawTextureWindow();
-            }
+            DrawTextureWindow();
 
             _ImGuiController.Render();
 
@@ -771,21 +802,52 @@ namespace GoonED
             base.OnRenderFrame(args);
         }
 
+        private Vector2f[] imgUVS = {
+                new Vector2f(1, 1),
+                new Vector2f(1, 0),
+                new Vector2f(0, 0),
+                new Vector2f(0, 1)
+        };
+
+        float itemScale = 50.0f;
+        int currentTexturePackage = 0;
+
+        private string[] texturePackages = { "textures1", "textures2", "textures3", "textures4", "newtextures", "sprites", "sprites2" };
+
         private void DrawTextureWindow()
         {
             ImGui.Begin("Sector Textures");
+
+            if(ImGui.BeginCombo("Texture Packages", texturePackages[currentTexturePackage]))
+            {
+                for (int i = 0; i < texturePackages.Length; i++)
+                {
+                    bool isSelected = (currentTexturePackage == i);
+                    if (ImGui.Selectable(texturePackages[i], isSelected) && !isSelected)
+                    { 
+                        currentTexturePackage = i;
+
+                        aceTextures.Cleanup();
+                        aceTextures.Load(AcesDataPath, texturePackages[currentTexturePackage]);
+                    }
+                    if(isSelected) ImGui.SetItemDefaultFocus();
+                }
+
+                ImGui.EndCombo();
+            }
+            ImGui.SliderFloat("##TexScale", ref itemScale, 20.0f, 250.0f);
 
             Vector2f windowPos = ImGui.GetWindowPos();
             Vector2f windowSize = ImGui.GetWindowSize();
 
             float windowX2 = windowPos.X + windowSize.X;
             Vector2f itemSpacing = ImGui.GetStyle().ItemSpacing;
-            Vector2f scale = new Vector2f(50.0f, 50.0f);
+            Vector2f scale = new Vector2f(itemScale, itemScale);
             for (int i = 0; i < aceTextures.Length; i++)
             {
-                if (ImGui.ImageButton("#acetex" + i, aceTextures.GetTexture(i).TextureID, scale))
+                if (ImGui.ImageButton("#acetex" + i, aceTextures.GetTexture(i).TextureID, scale, imgUVS[0], imgUVS[2]) && selectedSector >= 0)
                 {
-                    map.Sectors[selectedSector].SetTextureIndex(i);
+                    map.Sectors[selectedSector].SetTextureIndex(i, texturePackages[currentTexturePackage]);
                 }
 
                 Vector2f lastButtonPos = ImGui.GetItemRectMax();
@@ -834,7 +896,9 @@ namespace GoonED
             for(int i = 0; i < jsonMap.Sectors.Length; i++)
             {
                 var sector = jsonMap.Sectors[i];
-                Sector s = new Sector(sector.vertices, sector.lines, sector.floor, sector.ceiling, sector.layer);
+                Console.WriteLine(sector.textureIndex);
+                Sector s = new Sector(sector.vertices, sector.lines, sector.floor, sector.ceiling, sector.layer, sector.texturePackage);
+                s.SetTextureIndex(sector.textureIndex, sector.texturePackage);
                 s.lx = (float)sector.lx;
                 s.ly = (float)sector.ly;
                 s.lz = (float)sector.lz;
@@ -1012,7 +1076,7 @@ namespace GoonED
                 mapFile.AppendLine("lighting = " + (sectors[i].lx) + ", " + (sectors[i].ly) + ", " + (sectors[i].lz) + ", " + (sectors[i].lw));
                 mapFile.AppendLine("floor_slope ( sloped = False; direction = 0; height = 0; )");
                 mapFile.AppendLine("ceiling_slope( sloped = False; direction = 0; height = 0; )");
-                string texture = aceTextures.GetEntry(sectors[i].TextureIndex).name;
+                string texture = aceTextures.GetEntry(sectors[i].TextureIndex()).name;
                 mapFile.AppendLine(@"floor_texture(path = """+ texture + @"""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
                 mapFile.AppendLine(@"ceiling_texture(path = """+ texture + @"""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
                 mapFile.AppendLine(@"floor_plane(visible = True; solid = True; brightness_offset = 0; )");
@@ -1313,7 +1377,7 @@ namespace GoonED
 
             Vector2 mousePos = _camera.GetRelativeMousePos(MousePosition);
 
-            map.Vertices.Add(new Vector2(MathF.Round(mousePos.X), MathF.Round(mousePos.Y)));
+            map.Vertices.Add(new Vector2(MathF.Round(mousePos.X / gridSize) * gridSize, MathF.Round(mousePos.Y / gridSize) * gridSize));
 
             for (int i = startEditIndex_Vertex; i < map.Vertices.Count - 1; i++)
             {
@@ -1364,7 +1428,7 @@ namespace GoonED
                     bool convex = !IsConcave(temp_vertices);
 
                     if (convex)
-                        map.Sectors.Add(new Sector(vertexIndices, lineIndices, 10.0f, 0.0f, layer));
+                        map.Sectors.Add(new Sector(vertexIndices, lineIndices, 10.0f, 0.0f, layer, texturePackages[currentTexturePackage]));
                     else
                     {
                         int difference = map.Vertices.Count - startEditIndex_Vertex;

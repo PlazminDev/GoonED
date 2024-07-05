@@ -103,7 +103,17 @@ namespace GoonED
 
         public static byte[] RGBAFromDXT1(int width, int height, byte[] data)
         {
-            AssetRipper.TextureDecoder.Dxt.DxtDecoder.DecompressDXT1(data, width, height, out byte[] output);
+            AssetRipper.TextureDecoder.Dxt.DxtDecoder.DecompressDXT1(data, width, height, out data);
+
+            byte[] output = new byte[data.Length];
+            for (int i = 0; i < data.Length; i += 4)
+            {
+                output[i + 0] = data[i + 2];
+                output[i + 1] = data[i + 1];
+                output[i + 2] = data[i + 0];
+                output[i + 3] = data[i + 3];
+            }
+
             return output;
         }
 
