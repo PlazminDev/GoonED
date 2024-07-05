@@ -1,6 +1,9 @@
 ﻿using StbImageSharp;
 using StbiSharp;
 using System.Reflection;
+using AssetRipper.TextureDecoder.Rgb;
+using AssetRipper.TextureDecoder.Rgb.Formats;
+using AssetRipper.TextureDecoder.Rgb.Channels;
 
 namespace GoonED
 {
@@ -91,6 +94,47 @@ namespace GoonED
             {
                 return ImageResult.FromStream(stream);
             }
+        }
+
+        ulong PackRGBA(byte r, byte g, byte b, byte a)
+        {
+            return (ulong)((r << 24) | (g << 16) | (b << 8) | a);
+        }
+
+        public static byte[] RGBAFromDXT1(int width, int height, byte[] data)
+        {
+            AssetRipper.TextureDecoder.Dxt.DxtDecoder.DecompressDXT1(data, width, height, out byte[] output);
+            return output;
+        }
+
+        public static byte[] RGBAFromDXT5(int width, int height, byte[] data)
+        {
+            AssetRipper.TextureDecoder.Dxt.DxtDecoder.DecompressDXT5(data, width, height, out data);
+
+            byte[] output = new byte[data.Length];
+            for(int i = 0; i < data.Length; i+=4)
+            {
+                output[i + 0] = data[i + 2];
+                output[i + 1] = data[i + 1];
+                output[i + 2] = data[i + 0];
+                output[i + 3] = data[i + 3];
+            }
+
+            return output;
+        }
+        
+        public static byte[] RGBAFromARGB32(int width, int height, byte[] data)
+        {
+            RgbConverter.Convert<ColorARGB32, byte, ColorRGBA<byte>, byte>(data, width, height, out byte[] output);
+
+            return output;
+        }        
+        
+        public static byte[] RGBAFromRGB24(int width, int height, byte[] data)
+        {
+            RgbConverter.Convert<ColorRGB<byte>, byte, ColorRGBA<byte>, byte>(data, width, height, out byte[] output);
+
+            return output;
         }
     }
 }

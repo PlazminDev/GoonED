@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "gfXAlshv+2I=",
+  "dgSpecHash": "VZ0MR9pHcWo=",
   "success": true,
   "projectFilePath": "C:\\Users\\David\\Desktop\\GoonED\\GoonED.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\David\\.nuget\\packages\\assetripper.texturedecoder\\2.2.0\\assetripper.texturedecoder.2.2.0.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\imgui.net\\1.90.8.1\\imgui.net.1.90.8.1.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\json.net\\1.0.33\\json.net.1.0.33.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\opentk\\4.8.2\\opentk.4.8.2.nupkg.sha512",

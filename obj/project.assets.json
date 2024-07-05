@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "AssetRipper.TextureDecoder/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/AssetRipper.TextureDecoder.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/AssetRipper.TextureDecoder.dll": {}
+        }
+      },
       "ImGui.NET/1.90.8.1": {
         "type": "package",
         "dependencies": {
@@ -312,6 +321,19 @@
     }
   },
   "libraries": {
+    "AssetRipper.TextureDecoder/2.2.0": {
+      "sha512": "sucumJqDcVkPIDrOW53aNoolcgP5qKV/6FyFT591Rdz0aLw5WRDvpw7qj80v37zTUUaOSGxIyHzAHMkQQU1QmQ==",
+      "type": "package",
+      "path": "assetripper.texturedecoder/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "assetripper.texturedecoder.2.2.0.nupkg.sha512",
+        "assetripper.texturedecoder.nuspec",
+        "lib/net8.0/AssetRipper.TextureDecoder.dll",
+        "lib/net8.0/TextureDecoder.xml"
+      ]
+    },
     "ImGui.NET/1.90.8.1": {
       "sha512": "O/Z4akFQhywpLQ+SyPC3nzfZcGb0vPYmVVR21hRQxkaQNbVKbHzDWc2t9IoSv/nP2/ly6BXNNz7UK9ngbsgyLg==",
       "type": "package",
@@ -646,6 +668,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "AssetRipper.TextureDecoder >= 2.2.0",
       "ImGui.NET >= 1.90.8.1",
       "Json.Net >= 1.0.33",
       "OpenTK >= 4.8.2",
@@ -703,6 +726,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "AssetRipper.TextureDecoder": {
+            "target": "Package",
+            "version": "[2.2.0, )"
+          },
           "ImGui.NET": {
             "target": "Package",
             "version": "[1.90.8.1, )"

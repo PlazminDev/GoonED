@@ -1,6 +1,7 @@
 ﻿using GoonED.Shaders;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
 
 namespace GoonED.Rendering
 {
@@ -8,7 +9,7 @@ namespace GoonED.Rendering
     {
         private static int MAX_LINES = 2048;
 
-        private static float[] vertexArray = new float[MAX_LINES * 6 * 2];
+        private static float[] vertexArray = new float[MAX_LINES * 7 * 2];
 
         private static int vaoID;
         private static int vboID;
@@ -19,23 +20,23 @@ namespace GoonED.Rendering
         {
             public float startX, startY;
             public float endX, endY;
-            public float r, g, b;
+            public float r, g, b, a;
 
             private int lifetime = 0;
 
-            public Line(float startX, float startY, float endX, float endY, float r, float g, float b, int lifetime)
+            public Line(float startX, float startY, float endX, float endY, float r, float g, float b, float a, int lifetime)
             {
                 this.startX = startX; this.startY = startY;
                 this.endX = endX; this.endY = endY;
-                this.r = r; this.g = g; this.b = b;
+                this.r = r; this.g = g; this.b = b; this.a = a;
                 this.lifetime = lifetime;
             }
 
-            public Line(Vector2 start, Vector2 end, Vector3 color, int lifetime)
+            public Line(Vector2 start, Vector2 end, Vector4 color, int lifetime)
             {
                 startX = start.X; startY = start.Y;
                 endX = end.X; endY = end.Y;
-                r = color.X; g = color.Y; b = color.Z;
+                r = color.X; g = color.Y; b = color.Z; a= color.W;
                 this.lifetime = lifetime;
             }
 
@@ -62,11 +63,11 @@ namespace GoonED.Rendering
             GL.BufferData(BufferTarget.ArrayBuffer, new nint(vertexArray.Length * sizeof(float)), vertexArray, BufferUsageHint.DynamicDraw);
 
             // Position attribute
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 7 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
 
             // Color attribute
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 7 * sizeof(float), 3 * sizeof(float));
             GL.EnableVertexAttribArray(1);
 
             GL.BindVertexArray(0);
@@ -91,10 +92,16 @@ namespace GoonED.Rendering
             }
         }
 
-        public static void AddLine(Vector2 from, Vector2 to, Vector3 color, int lifetime)
+        public static void AddLine(Vector2 from, Vector2 to, Vector4 color, int lifetime)
         {
-            if (lines.Count >= MAX_LINES) { /*Console.WriteLine("Too many lines!");*/ return; }
+            if (lines.Count >= MAX_LINES) { Console.WriteLine("Too many lines!"); return; }
             lines.Add(new Line(new Vector2(from.X, from.Y), new Vector2(to.X, to.Y), color, lifetime));
+        }
+
+        public static void AddLine(float startX, float startY, float endX, float endY, float r, float g, float b, float a, int lifetime)
+        {
+            if (lines.Count >= MAX_LINES) { Console.WriteLine("Too many lines!"); return; }
+            lines.Add(new Line(startX, startY, endX, endY, r, g, b, a, lifetime));
         }
 
         public static void Draw(Camera camera)
@@ -107,18 +114,21 @@ namespace GoonED.Rendering
                 for (int i = 0; i < 2; i++)
                 {
                     Vector2 position = i == 0 ? new Vector2(line.startX, line.startY) : new Vector2(line.endX, line.endY);
-                    Vector3 color = new Vector3(line.r, line.g, line.b);
 
                     vertexArray[index + 0] = position.X;
                     vertexArray[index + 1] = position.Y;
                     vertexArray[index + 2] = -10.0f;
 
-                    vertexArray[index + 3] = color.X;
-                    vertexArray[index + 4] = color.Y;
-                    vertexArray[index + 5] = color.Z;
-                    index += 6;
+                    vertexArray[index + 3] = line.r;
+                    vertexArray[index + 4] = line.g;
+                    vertexArray[index + 5] = line.b;
+                    vertexArray[index + 6] = line.a;
+                    index += 7;
                 }
             }
+
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.BufferSubData(BufferTarget.ArrayBuffer, 0, new nint(index * sizeof(float)), vertexArray);
@@ -136,6 +146,8 @@ namespace GoonED.Rendering
             GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);
             GL.BindVertexArray(0);
+
+            GL.Disable(EnableCap.Blend);
 
             lineShader.Unbind();
         }

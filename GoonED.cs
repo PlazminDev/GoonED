@@ -22,8 +22,10 @@ namespace GoonED
     {
         private ImGuiController _ImGuiController;
 
-        private Vector3 RED = new Vector3(1.0f, 0.0f, 0.0f);
-        private Vector3 YELLOW = new Vector3(1.0f, 1.0f, 0.0f);
+        private Vector4 RED = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+        private Vector4 YELLOW = new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+        private Vector3 YELLOW_V3 = new Vector3(1.0f, 1.0f, 0.0f);
+        private Vector3 RED_V3 = new Vector3(1.0f, 0.0f, 0.0f);
 
         private Dictionary<string, Texture> Textures = new Dictionary<string, Texture>();
 
@@ -36,7 +38,8 @@ namespace GoonED
         bool rightMouse = false;
         bool middleMouse = false;
 
-        string AcesDataPath = "unused";
+        AceTextures aceTextures;
+        string AcesDataPath;
         private byte[] TempAcesPath = new byte[256];
         private byte[] LoadMapName = new byte[256];
 
@@ -60,12 +63,16 @@ namespace GoonED
 
             public double ceiling;
 
+            public double lx, ly, lz, lw;
+
             public int[] indices;
 
             public int layer { get; set; }
 
             private int[] vbos;
             private int vaoID;
+
+            private int textureIndex;
 
             public bool hovered = false;
             public bool selected = false;
@@ -80,44 +87,69 @@ namespace GoonED
                 this.ceiling = ceiling;
                 this.layer = layer;
 
+                this.textureIndex = 0;
+
+                lx = 1;
+                ly = 1;
+                lz = 1;
+                lw = 1;
+
                 vaoID = GL.GenVertexArray();
                 GL.BindVertexArray(vaoID);
 
-                this.vbos = new int[2];
+                this.vbos = new int[3];
 
                 int numVertices = vertices.Length;
                 uint[] _indices = new uint[IndexBufferUtil.GetTriangleFanIndexCount(numVertices)];
                 IndexBufferUtil.BuildTriangleFan(0, (uint)numVertices, ref _indices);
 
                 this.indices = new int[_indices.Length];
-                for(int i = 0; i < _indices.Length; i++) this.indices[i] = (int)_indices[i];
+                for (int i = 0; i < _indices.Length; i++) this.indices[i] = (int)_indices[i];
                 //Console.WriteLine(string.Join(",",indices));
 
                 int vboID = GL.GenBuffer();
                 vbos[0] = vboID;
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
                 float[] _vertices = new float[vertices.Length * 3];
-                for(int i = 0; i < vertices.Length; i++)
+                float[] uvs = new float[vertices.Length * 2];
+                for (int i = 0; i < vertices.Length; i++)
                 {
                     _vertices[(i * 3) + 0] = map.Vertices[vertices[i]].X;
                     _vertices[(i * 3) + 1] = map.Vertices[vertices[i]].Y;
                     _vertices[(i * 3) + 2] = -7.5f;
+
+                    uvs[(i * 2) + 0] = map.Vertices[vertices[i]].X;
+                    uvs[(i * 2) + 1] = map.Vertices[vertices[i]].Y;
                 }
-                //Console.WriteLine(string.Join(",", _vertices));
 
                 GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Length * sizeof(float)), _vertices, BufferUsageHint.StaticDraw);
                 GL.EnableVertexAttribArray(0);
                 GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-                // Indices
+                // UVs
                 vboID = GL.GenBuffer();
                 vbos[1] = vboID;
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
+                GL.BufferData(BufferTarget.ArrayBuffer, (nint)(uvs.Length * sizeof(float)), uvs, BufferUsageHint.StaticDraw);
+                GL.EnableVertexAttribArray(1);
+                GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+                // Indices
+                vboID = GL.GenBuffer();
+                vbos[2] = vboID;
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, vboID);
                 GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(_indices.Length * sizeof(uint)), _indices, BufferUsageHint.StaticDraw);
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
                 GL.BindVertexArray(0);
             }
+
+            public int TextureIndex => textureIndex;
+
+            public void SetTextureIndex(int i)
+            {
+                this.textureIndex = i;
+            }
+
 
             public int GetVaoID()
             {
@@ -126,10 +158,11 @@ namespace GoonED
 
             public void Destroy()
             {
-                for(int i = 0; i < vbos.Length; i++)
+                for (int i = 0; i < vbos.Length; i++)
                 {
-                    GL.DeleteVertexArray(vbos[i]);
+                    GL.DeleteBuffer(vbos[i]);
                 }
+                GL.DeleteVertexArray(GetVaoID());
             }
         }
 
@@ -287,10 +320,13 @@ namespace GoonED
 
             _camera = new Camera(ClientSize.X, ClientSize.Y);
 
+            aceTextures = new AceTextures();
+
             // Ini file
             if (File.Exists("user.ini"))
             {
                 AcesDataPath = File.ReadAllText("user.ini");
+                aceTextures.Load(AcesDataPath);
             }
         }
 
@@ -316,6 +352,7 @@ namespace GoonED
             }
             sectorRenderer.Cleanup();
             spriteRenderer.Cleanup();
+            aceTextures.Cleanup();
             _ImGuiController.Dispose();
             base.OnUnload();
         }
@@ -363,13 +400,16 @@ namespace GoonED
             {
                 LineRenderer.AddLine(new Vector2(i + MathF.Round(_camera.position.X), -_camera.orthographicSize + _camera.position.Y),
                                         new Vector2(i + MathF.Round(_camera.position.X), _camera.orthographicSize + _camera.position.Y),
-                    i + MathF.Round(_camera.position.X) == 0 ? new Vector3(0.3f, 1.0f, 0.3f) : new Vector3(0.5f, 0.5f, 0.5f), 1);
+                    i + MathF.Round(_camera.position.X) == 0 ? new Vector4(0.3f, 1.0f, 0.3f, 1.0f) : new Vector4(1f, 1f, 1f, 
+                    (int)(i + MathF.Round(_camera.position.X)) % 5 == 0 ? 1.0f : 0.2f), 1);
 
                 LineRenderer.AddLine(new Vector2(-_camera.orthographicSize + _camera.position.X, i + MathF.Round(_camera.position.Y)),
                                         new Vector2(_camera.orthographicSize + _camera.position.X, i + MathF.Round(_camera.position.Y)),
-                    i + MathF.Round(_camera.position.Y) == 0 ? new Vector3(1.0f, 0.3f, 0.3f) : new Vector3(0.5f, 0.5f, 0.5f), 1);
+                    i + MathF.Round(_camera.position.Y) == 0 ? new Vector4(1.0f, 0.3f, 0.3f, 1.0f) : new Vector4(1f, 1f, 1f,
+                    (int)(i + MathF.Round(_camera.position.Y)) % 5 == 0 ? 1.0f : 0.2f), 1);
             }
 
+            /*
             for (int i = (int)-_camera.orthographicSize; i < (int)_camera.orthographicSize; i++)
             {
                 LineRenderer.AddLine(new Vector2(i + MathF.Round(_camera.position.X), -_camera.orthographicSize + _camera.position.Y),
@@ -380,6 +420,7 @@ namespace GoonED
                                         new Vector2(_camera.orthographicSize + _camera.position.X, i + MathF.Round(_camera.position.Y)),
                     i + MathF.Round(_camera.position.Y) == 0 ? new Vector3(1.0f, 0.3f, 0.3f) : new Vector3(0.5f, 0.5f, 0.5f), 1);
             }
+            */
 
             /*
             Vector2 mousePos = _camera.GetRelativeMousePos(MousePosition);
@@ -395,17 +436,18 @@ namespace GoonED
             DrawLines();
             DrawVertices();
 
-            //GL.Enable(EnableCap.DepthTest);
-            LineRenderer.Draw(_camera);
-            PointRenderer.Draw(_camera);
-            sectorRenderer.Render(map.Sectors, _camera);
-
             List<Sprite> temp = new List<Sprite>();
             Textures.TryGetValue("Unknown", out Texture unknown);
             Textures.TryGetValue("Mike", out Texture mike);
+            //Texture mike = aceTextures.GetTexture(0);
             Textures.TryGetValue("Goon", out Texture goon);
             Textures.TryGetValue("Mook", out Texture mook);
             Textures.TryGetValue("Wiseguy", out Texture wiseguy);
+
+            //GL.Enable(EnableCap.DepthTest);
+            LineRenderer.Draw(_camera);
+            PointRenderer.Draw(_camera);
+            sectorRenderer.Render(map.Sectors, _camera, aceTextures);
 
             for(int i = 0; i < map.Things.Count; i++)
             {
@@ -439,6 +481,8 @@ namespace GoonED
             //GL.Disable(EnableCap.DepthTest);
 
             //ImGui.DockSpaceOverViewport();
+
+            //Console.WriteLine("Vertices: " + map.Vertices.Count + ", Lines: " + map.Lines.Count);
 
             if (AcesDataPath != null && !loadPrompt)
             {
@@ -507,6 +551,67 @@ namespace GoonED
                     float ceil = (float)map.Sectors[selectedSector].ceiling;
                     ImGui.DragFloat("##Ceil", ref ceil, 0.01f);
                     map.Sectors[selectedSector].ceiling = ceil;
+                    map.Sectors[selectedSector].ceiling = ceil;
+
+                    Vector4f col = new Vector4f((float)map.Sectors[selectedSector].lx,
+                        (float)map.Sectors[selectedSector].ly, (float)map.Sectors[selectedSector].lz, (float)map.Sectors[selectedSector].lw);
+                    ImGui.TextUnformatted("Sector Lighting");
+                    ImGui.ColorEdit4("###SectorLight", ref col);
+                    map.Sectors[selectedSector].lx = col.X;
+                    map.Sectors[selectedSector].ly = col.Y;
+                    map.Sectors[selectedSector].lz = col.Z;
+                    map.Sectors[selectedSector].lw = col.W;
+
+                    int st = map.Sectors[selectedSector].TextureIndex;
+                    if(ImGui.InputInt("###SectorTex", ref st))
+                    {
+                        if (st >= aceTextures.Length) st = aceTextures.Length - 1;
+                        if (st < 0) st = 0;
+                        map.Sectors[selectedSector].SetTextureIndex(st);
+
+                        Console.WriteLine(aceTextures.GetEntry(st).format);
+                    }
+
+                    /*
+                    if (ImGui.Button("Delete"))
+                    {
+                        int vertexLength = map.Sectors[selectedSector].vertices.Length;
+                        int lineLength = map.Sectors[selectedSector].lines.Length;
+
+                        int startVertex = map.Sectors[selectedSector].vertices[vertexLength - 1];
+                        int startLine = map.Sectors[selectedSector].lines[0];
+
+                        for (int i = 0; i < vertexLength; i++)
+                        {
+                            map.Vertices.RemoveAt(startVertex);
+                        }
+
+                        for (int i = 0; i < lineLength; i++)
+                        {
+                            map.Lines.RemoveAt(startLine);
+                        }
+
+                        for(int i = selectedSector + 1; i < map.Sectors.Count; i++)
+                        {
+                            var sector = map.Sectors[i];
+
+                            for (int j = 0; j < sector.vertices.Length; j++)
+                            {
+                                sector.vertices[j] -= vertexLength;
+                            }
+
+                            for (int j = 0; j < sector.lines.Length; j++)
+                            {
+                                sector.lines[j] -= lineLength;
+                            }
+                        }
+
+                        map.Sectors[selectedSector].Destroy();
+                        map.Sectors.RemoveAt(selectedSector);
+
+                        selectedSector = -1;
+                    }
+                    */
                 }
 
                 if(selectedThing != -1)
@@ -537,6 +642,14 @@ namespace GoonED
                     if (ImGui.Button("Goon")) { map.Things[selectedThing].id = 10001; }
                     if (ImGui.Button("Mook")) { map.Things[selectedThing].id = 10002; }
                     if (ImGui.Button("Wiseguy")) { map.Things[selectedThing].id = 10003; }
+
+                    ImGui.Dummy(new Vector2f(0.0f, 10.0f));
+
+                    if(ImGui.Button("Delete"))
+                    {
+                        map.Things.RemoveAt(selectedThing);
+                        selectedThing = -1;
+                    }
                 }
             }
 
@@ -564,7 +677,7 @@ namespace GoonED
                 ImGui.InputText("###", TempAcesPath, 256);
                 if (ImGui.Button("Confirm"))
                 {
-                    AcesDataPath = Encoding.Default.GetString(TempAcesPath).Replace("\0", string.Empty).Trim();
+                    AcesDataPath = Encoding.Default.GetString(TempAcesPath).Replace(Convert.ToChar(0x0).ToString(), "");
 
                     if (!Directory.Exists(AcesDataPath) || !AcesDataPath.EndsWith("AcesData") || !File.Exists(AcesDataPath + "/../Fallen Aces.exe"))
                     {
@@ -576,8 +689,10 @@ namespace GoonED
                         Console.WriteLine("Aces Data path saved as: " + AcesDataPath);
 
                         FileStream file = File.Create("user.ini");
-                        file.Write(TempAcesPath);
+                        file.Write(Encoding.UTF8.GetBytes(AcesDataPath));
                         file.Close();
+
+                        aceTextures.Load(AcesDataPath);
                     }
                 }
                 if (AcesDataPathAlertTimer > 0.0f)
@@ -641,12 +756,43 @@ namespace GoonED
             //ImGui.ColorEdit3("Fog Color", ref fogColor);
             ImGui.End();
 
+            if(selectedSector >= 0)
+            {
+                DrawTextureWindow();
+            }
+
             _ImGuiController.Render();
 
             ImGuiController.CheckGLError("End of frame");
 
             SwapBuffers();
             base.OnRenderFrame(args);
+        }
+
+        private void DrawTextureWindow()
+        {
+            ImGui.Begin("Sector Textures");
+
+            Vector2f windowPos = ImGui.GetWindowPos();
+            Vector2f windowSize = ImGui.GetWindowSize();
+
+            float windowX2 = windowPos.X + windowSize.X;
+            Vector2f itemSpacing = ImGui.GetStyle().ItemSpacing;
+            Vector2f scale = new Vector2f(50.0f, 50.0f);
+            for (int i = 0; i < aceTextures.Length; i++)
+            {
+                if (ImGui.ImageButton("#acetex" + i, aceTextures.GetTexture(i).TextureID, scale))
+                {
+                    map.Sectors[selectedSector].SetTextureIndex(i);
+                }
+
+                Vector2f lastButtonPos = ImGui.GetItemRectMax();
+                float lastButtonX2 = lastButtonPos.X;
+                float nextButtonX2 = lastButtonX2 + itemSpacing.X + scale.X;
+                if (i + 1 < aceTextures.Length && nextButtonX2 < windowX2) ImGui.SameLine();
+            }
+
+            ImGui.End();
         }
 
         private void Save()
@@ -686,13 +832,19 @@ namespace GoonED
             for(int i = 0; i < jsonMap.Sectors.Length; i++)
             {
                 var sector = jsonMap.Sectors[i];
-                map.Sectors.Add(new Sector(sector.vertices, sector.lines, sector.floor, sector.ceiling, sector.layer));
+                Sector s = new Sector(sector.vertices, sector.lines, sector.floor, sector.ceiling, sector.layer);
+                s.lx = (float)sector.lx;
+                s.ly = (float)sector.ly;
+                s.lz = (float)sector.lz;
+                s.lw = (float)sector.lw;
+
+                Console.WriteLine(s.lx);
+                map.Sectors.Add(s);
             }
 
             for(int i = 0; i < jsonMap.things.Length; i++)
             {
                 var thing = jsonMap.things[i];
-                Console.Write(thing);
                 map.Things.Add(thing);
             }
 
@@ -709,10 +861,10 @@ namespace GoonED
             for (int i = startEditIndex_Vertex; i < map.Vertices.Count; i++)
             {
                 if (i != startEditIndex_Vertex)
-                    PointRenderer.AddPoint(new Vector2(map.Vertices[i].X, map.Vertices[i].Y), YELLOW, 1);
+                    PointRenderer.AddPoint(new Vector2(map.Vertices[i].X, map.Vertices[i].Y), YELLOW_V3, 1);
             }
 
-            PointRenderer.AddPoint(new Vector2(map.Vertices[startEditIndex_Vertex].X, map.Vertices[startEditIndex_Vertex].Y), RED, 1);
+            PointRenderer.AddPoint(new Vector2(map.Vertices[startEditIndex_Vertex].X, map.Vertices[startEditIndex_Vertex].Y), RED_V3, 1);
         }
 
         private void DrawLines()
@@ -729,9 +881,9 @@ namespace GoonED
         {
             for (int i = 0; i < map.Sectors.Count; i++)
             {
-                Vector3 col = new Vector3(1.0f, 1.0f, 0.0f);
+                Vector4 col = new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 
-                if (map.Sectors[i].layer != layer) col *= 0.2f;
+                if (map.Sectors[i].layer != layer) col.W *= 0.2f;
 
                 for (int j = 0; j < map.Sectors[i].lines.Length; j++)
                 {
@@ -741,9 +893,13 @@ namespace GoonED
                         col, 1);
                 }
 
-                for (int j = 0; j < map.Sectors[i].vertices.Length; j++)
+                if (map.Sectors[i].layer == layer)
                 {
-                    PointRenderer.AddPoint(new Vector2(map.Vertices[map.Sectors[i].vertices[j]].X, map.Vertices[map.Sectors[i].vertices[j]].Y), col, 1);
+                    for (int j = 0; j < map.Sectors[i].vertices.Length; j++)
+                    {
+                        PointRenderer.AddPoint(new Vector2(map.Vertices[map.Sectors[i].vertices[j]].X, map.Vertices[map.Sectors[i].vertices[j]].Y),
+                            new Vector3(col.X, col.Y, col.Z), 1);
+                    }
                 }
             }
         }
@@ -779,7 +935,7 @@ namespace GoonED
             mapFile.AppendLine();
 
             // WRITE LAYERS
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 99; i++)
             {
                 mapFile.AppendLine("");
                 mapFile.AppendLine("LayerInfo");
@@ -850,11 +1006,13 @@ namespace GoonED
 
                 mapFile.AppendLine("height_floor = " + sectors[i].floor + ";");
                 mapFile.AppendLine("height_ceiling = " + sectors[i].ceiling + ";");
-                mapFile.AppendLine("lighting = 1, 1, 1, 1;");
+                //mapFile.AppendLine("lighting = 1, 1, 1, 1;");
+                mapFile.AppendLine("lighting = " + (sectors[i].lx) + ", " + (sectors[i].ly) + ", " + (sectors[i].lz) + ", " + (sectors[i].lw));
                 mapFile.AppendLine("floor_slope ( sloped = False; direction = 0; height = 0; )");
                 mapFile.AppendLine("ceiling_slope( sloped = False; direction = 0; height = 0; )");
-                mapFile.AppendLine(@"floor_texture(path = ""Editor/Default.png""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
-                mapFile.AppendLine(@"ceiling_texture(path = ""Editor/Default.png""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
+                string texture = aceTextures.GetEntry(sectors[i].TextureIndex).name;
+                mapFile.AppendLine(@"floor_texture(path = """+ texture + @"""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
+                mapFile.AppendLine(@"ceiling_texture(path = """+ texture + @"""; offset = 0, 0; scale = 0.5, 0.5; angle = 0; )");
                 mapFile.AppendLine(@"floor_plane(visible = True; solid = True; brightness_offset = 0; )");
                 mapFile.AppendLine(@"ceiling_plane(visible = True; solid = True; brightness_offset = 0; )");
 
@@ -1011,7 +1169,7 @@ namespace GoonED
                 Vector2 mPos = _camera.GetRelativeMousePos(MousePosition);
                 for (int i = 0; i < map.Things.Count; i++)
                 {
-                    Console.WriteLine(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)));
+                    //Console.WriteLine(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)));
                     if (Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)) < 1.0f)
                     {
                         hoveredThing = i;
@@ -1058,7 +1216,7 @@ namespace GoonED
                     selectedThing = -1;
                     for(int i = 0; i < map.Things.Count; i++)
                     {
-                        Console.WriteLine(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)));
+                        //Console.WriteLine(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)));
                         if(Vector2.Distance(mPos, new Vector2((float)map.Things[i].x, (float)map.Things[i].z)) < 1.0f)
                         {
                             selectedThing = i;
@@ -1282,6 +1440,16 @@ namespace GoonED
                     if (map.Sectors.Count - 1 >= 0)
                     {
                         Sector s = map.Sectors[map.Sectors.Count - 1];
+
+                        if(selectedSector == map.Sectors.Count - 1)
+                        {
+                            selectedSector = -1;
+                        }
+                        if (hoveredSector == map.Sectors.Count - 1)
+                        {
+                            hoveredSector = -1;
+                        }
+
                         map.Vertices.RemoveRange(map.Vertices.Count - s.vertices.Length, s.vertices.Length);
                         map.Lines.RemoveRange(map.Lines.Count - s.lines.Length, s.lines.Length);
                         s.Destroy();

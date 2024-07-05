@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AssetRipper.TextureDecoder": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "ImGui.NET": {
               "target": "Package",
               "version": "[1.90.8.1, )"

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AssetRipper.TextureDecoder" Version="2.2.0" />
     <PackageReference Include="ImGui.NET" Version="1.90.8.1" />
     <PackageReference Include="Json.Net" Version="1.0.33" />
     <PackageReference Include="OpenTK" Version="4.8.2" />
