@@ -562,6 +562,7 @@ namespace GoonED
                     map.Sectors[selectedSector].lz = col.Z;
                     map.Sectors[selectedSector].lw = col.W;
 
+                    /*
                     int st = map.Sectors[selectedSector].TextureIndex;
                     if(ImGui.InputInt("###SectorTex", ref st))
                     {
@@ -571,6 +572,7 @@ namespace GoonED
 
                         Console.WriteLine(aceTextures.GetEntry(st).format);
                     }
+                    */
 
                     /*
                     if (ImGui.Button("Delete"))
