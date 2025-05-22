@@ -1,5 +1,7 @@
 # GoonED
 
+# this project is no longer supported, and it very buggy and generally not good to use. please use the official Fallen Aces editor instead
+
 A custom Fallen Aces map editor for creating simple levels before the full level editor releases later this year
 
 ### Heads up, the readme in the release is not up to date 
